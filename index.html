@@ -1086,6 +1086,20 @@ setup();
   );
 
   console.log('Supabase conectado:', db);
+  async function probarConexion() {
+  const { data, error } = await db
+    .from('kanji')
+    .select('character, meaning_es')
+    .limit(3);
+
+  if (error) {
+    console.error('❌ Error al leer Supabase:', error);
+  } else {
+    console.log('✅ Kanji recibidos desde Supabase:', data);
+  }
+}
+
+probarConexion();
 </script>
 
 </body>
