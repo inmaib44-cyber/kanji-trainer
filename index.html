@@ -1,0 +1,1078 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kanji Trainer N5</title>
+
+<style>
+:root{
+  --ink:#20303a;
+  --muted:#68747b;
+  --paper:#fbf7ef;
+  --card:#fffdf9;
+  --line:#e6ded2;
+  --red:#d84d4d;
+  --pink:#f8dddd;
+  --green:#2f8c68;
+  --orange:#d9822b
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,"Segoe UI","Noto Sans JP",sans-serif;
+  background:linear-gradient(135deg,#fbf7ef,#f6f1e8);
+  color:var(--ink)
+}
+
+button{font:inherit}
+
+.app{
+  max-width:1180px;
+  margin:auto;
+  padding:22px
+}
+
+.hero{
+  background:linear-gradient(100deg,#fff9f1,#f8e7e2);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:22px 26px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:18px;
+  overflow:hidden
+}
+
+.hero h1{
+  margin:0;
+  font-family:Georgia,serif;
+  font-size:34px
+}
+
+.jp{
+  font-family:"Yu Mincho","Noto Serif JP",serif
+}
+
+.hero .mark{
+  font-size:44px;
+  background:#f4c9c4;
+  border-radius:50%;
+  width:70px;
+  height:70px;
+  display:grid;
+  place-items:center
+}
+
+.sub{
+  color:var(--muted);
+  margin-top:5px
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  margin:18px 0
+}
+
+.stat,.card{
+  background:rgba(255,253,249,.9);
+  border:1px solid var(--line);
+  border-radius:18px
+}
+
+.stat{
+  padding:14px;
+  text-align:center
+}
+
+.stat b{
+  display:block;
+  font-size:24px
+}
+
+.stat small{
+  color:var(--muted)
+}
+
+.tabs{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:15px
+}
+
+.tabs button,.ghost{
+  border:1px solid var(--line);
+  background:var(--card);
+  border-radius:12px;
+  padding:11px 15px;
+  cursor:pointer
+}
+
+.tabs button.active{
+  border-color:var(--red);
+  background:#fff1ef;
+  color:#a72f2f
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.55fr) minmax(280px,.75fr);
+  gap:16px
+}
+
+.quiz{padding:22px}
+
+.topline{
+  display:flex;
+  justify-content:space-between;
+  color:var(--muted);
+  font-size:14px
+}
+
+.kanji{
+  font-size:116px;
+  text-align:center;
+  margin:18px 0 8px;
+  line-height:1
+}
+
+.question{
+  text-align:center;
+  font-weight:650
+}
+
+.answers{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin:20px 0
+}
+
+.answer{
+  min-height:62px;
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:white;
+  font-size:25px;
+  cursor:pointer
+}
+
+.answer:hover{border-color:#c8aaa3}
+.answer.good{outline:3px solid #a9d8c2}
+.answer.bad{outline:3px solid #efb1aa}
+
+.feedback{
+  min-height:65px;
+  background:#faf2e8;
+  border-radius:14px;
+  padding:13px;
+  color:var(--muted)
+}
+
+.feedback strong{color:var(--ink)}
+
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top:12px
+}
+
+.primary{
+  flex:1;
+  border:0;
+  border-radius:13px;
+  padding:13px;
+  background:var(--ink);
+  color:white;
+  cursor:pointer
+}
+
+.primary:disabled{opacity:.35}
+
+.side{
+  display:grid;
+  gap:16px
+}
+
+.side .card{padding:17px}
+.side h3{margin:0 0 12px}
+
+.progressbar{
+  height:10px;
+  background:#eee8df;
+  border-radius:20px;
+  overflow:hidden
+}
+
+.progressbar span{
+  display:block;
+  height:100%;
+  background:var(--green);
+  width:0
+}
+
+.legend{
+  display:grid;
+  gap:8px;
+  margin-top:12px;
+  font-size:14px
+}
+
+.row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px
+}
+
+.list{
+  display:grid;
+  gap:8px;
+  max-height:310px;
+  overflow:auto
+}
+
+.krow{
+  display:grid;
+  grid-template-columns:40px 1fr auto;
+  align-items:center;
+  gap:9px;
+  border-bottom:1px solid #eee7dd;
+  padding:7px 0
+}
+
+.krow .glyph{font-size:27px}
+
+.pill{
+  font-size:12px;
+  border-radius:999px;
+  padding:5px 8px;
+  background:#eee
+}
+
+.new{background:#ececec}
+.learn{background:#fde6ca;color:#92500c}
+.almost{background:#dceaf8;color:#245b89}
+.master{background:#dcefe5;color:#236348}
+
+.footerCards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-top:16px
+}
+
+.mini{padding:16px}
+.mini b{display:block;margin-bottom:4px}
+.mini span{color:var(--muted);font-size:14px}
+
+.sakura{color:#d65b6b}
+
+.note{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:15px
+}
+
+@media(max-width:760px){
+  .app{padding:12px}
+  .hero{padding:18px}
+  .hero h1{font-size:28px}
+  .stats{grid-template-columns:1fr 1fr}
+  .grid{grid-template-columns:1fr}
+  .kanji{font-size:92px}
+  .footerCards{grid-template-columns:1fr}
+  .answers{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+
+<body>
+
+<main class="app">
+
+<header class="hero">
+  <div style="display:flex;align-items:center;gap:16px">
+    <div class="mark jp">学</div>
+
+    <div>
+      <h1>Kanji Trainer <span class="sakura">桜</span></h1>
+      <div class="sub">
+        N5 · 一歩ずつ、もっと日本語 — paso a paso
+      </div>
+    </div>
+  </div>
+
+  <div class="jp" style="font-size:28px">
+    継続は力なり
+  </div>
+</header>
+
+
+<section class="stats">
+
+  <div class="stat">
+    <b id="mastered">0</b>
+    <small>Dominados</small>
+  </div>
+
+  <div class="stat">
+    <b id="accuracy">—</b>
+    <small>Precisión total</small>
+  </div>
+
+  <div class="stat">
+    <b id="answered">0</b>
+    <small>Respuestas</small>
+  </div>
+
+  <div class="stat">
+    <b id="streak">0</b>
+    <small>Racha actual</small>
+  </div>
+
+</section>
+
+
+<nav class="tabs">
+
+  <button class="active" data-mode="kanji">
+    漢字 → Lectura
+  </button>
+
+  <button data-mode="reading">
+    Lectura → 漢字
+  </button>
+
+  <button data-mode="words">
+    Palabras
+  </button>
+
+  <button data-filter="weak">
+    Repasar errores
+  </button>
+
+  <button data-filter="new">
+    Nuevos
+  </button>
+
+  <button data-filter="all">
+    Todos
+  </button>
+
+</nav>
+
+
+<div class="grid">
+
+<section class="card quiz">
+
+  <div class="topline">
+    <span id="category">Naturaleza</span>
+    <span id="status">Nuevo</span>
+  </div>
+
+  <div id="prompt" class="kanji jp">
+    水
+  </div>
+
+  <div id="question" class="question">
+    ¿Cómo se lee este kanji?
+  </div>
+
+  <div id="answers" class="answers"></div>
+
+  <div id="feedback" class="feedback">
+    Elige una respuesta. El significado aparece después para que primero pienses en japonés.
+  </div>
+
+  <div class="actions">
+    <button id="next" class="primary" disabled>
+      Siguiente →
+    </button>
+  </div>
+
+</section>
+
+
+<aside class="side">
+
+<section class="card">
+
+  <h3>Mi progreso · N5</h3>
+
+  <div class="row">
+    <span>Kanji trabajados</span>
+    <b id="worked">0 / 20</b>
+  </div>
+
+  <div class="progressbar" style="margin-top:10px">
+    <span id="bar"></span>
+  </div>
+
+  <div class="legend">
+
+    <div class="row">
+      <span>Dominados</span>
+      <b id="lMaster">0</b>
+    </div>
+
+    <div class="row">
+      <span>Casi dominados</span>
+      <b id="lAlmost">0</b>
+    </div>
+
+    <div class="row">
+      <span>Aprendiendo</span>
+      <b id="lLearn">0</b>
+    </div>
+
+    <div class="row">
+      <span>Nuevos</span>
+      <b id="lNew">20</b>
+    </div>
+
+  </div>
+
+</section>
+
+
+<section class="card">
+
+  <h3>Mis kanji</h3>
+
+  <div id="kanjiList" class="list"></div>
+
+</section>
+
+</aside>
+
+</div>
+
+
+<section class="footerCards">
+
+  <div class="card mini">
+    <b>⛩️ Repasar mis errores</b>
+    <span>Los kanji que fallas reciben más peso en el quiz.</span>
+  </div>
+
+  <div class="card mini">
+    <b>🌸 Nuevos kanji</b>
+    <span>Avanza poco a poco sin perder los anteriores.</span>
+  </div>
+
+  <div class="card mini">
+    <b>🖌️ Próximamente: radicales</b>
+    <span>La estructura ya permite añadir radical, componentes y trazos.</span>
+  </div>
+
+</section>
+
+<div class="note">
+  Tu progreso se guarda automáticamente en este navegador. No se envía a ningún servidor.
+</div>
+
+</main>
+
+
+<script>
+
+const DATA=[
+
+{k:'水',kun:'みず',on:'すい',m:'agua',c:'Naturaleza',
+words:[['水','みず'],['水曜日','すいようび']]},
+
+{k:'山',kun:'やま',on:'さん',m:'montaña',c:'Naturaleza',
+words:[['山','やま'],['富士山','ふじさん']]},
+
+{k:'川',kun:'かわ',on:'せん',m:'río',c:'Naturaleza',
+words:[['川','かわ']]},
+
+{k:'木',kun:'き',on:'もく',m:'árbol',c:'Naturaleza',
+words:[['木','き'],['木曜日','もくようび']]},
+
+{k:'火',kun:'ひ',on:'か',m:'fuego',c:'Naturaleza',
+words:[['火','ひ'],['火曜日','かようび']]},
+
+{k:'月',kun:'つき',on:'げつ',m:'luna / mes',c:'Tiempo',
+words:[['月','つき'],['月曜日','げつようび']]},
+
+{k:'日',kun:'ひ',on:'にち',m:'día / sol',c:'Tiempo',
+words:[['日','ひ'],['日本','にほん']]},
+
+{k:'人',kun:'ひと',on:'じん',m:'persona',c:'Personas',
+words:[['人','ひと'],['日本人','にほんじん']]},
+
+{k:'本',kun:'もと',on:'ほん',m:'libro / origen',c:'Objetos',
+words:[['本','ほん'],['日本','にほん']]},
+
+{k:'学',kun:'まなぶ',on:'がく',m:'estudio',c:'Estudio',
+words:[['学生','がくせい'],['学校','がっこう']]},
+
+{k:'先',kun:'さき',on:'せん',m:'antes / delante',c:'Personas',
+words:[['先生','せんせい']]},
+
+{k:'生',kun:'いきる',on:'せい',m:'vida / nacer',c:'Personas',
+words:[['学生','がくせい'],['先生','せんせい']]},
+
+{k:'大',kun:'おおきい',on:'だい',m:'grande',c:'Adjetivos',
+words:[['大学','だいがく']]},
+
+{k:'小',kun:'ちいさい',on:'しょう',m:'pequeño',c:'Adjetivos',
+words:[['小さい','ちいさい']]},
+
+{k:'中',kun:'なか',on:'ちゅう',m:'dentro / medio',c:'Posición',
+words:[['中','なか']]},
+
+{k:'上',kun:'うえ',on:'じょう',m:'arriba',c:'Posición',
+words:[['上','うえ']]},
+
+{k:'下',kun:'した',on:'か',m:'abajo',c:'Posición',
+words:[['下','した']]},
+
+{k:'左',kun:'ひだり',on:'さ',m:'izquierda',c:'Posición',
+words:[['左','ひだり']]},
+
+{k:'右',kun:'みぎ',on:'う',m:'derecha',c:'Posición',
+words:[['右','みぎ']]},
+
+{k:'時',kun:'とき',on:'じ',m:'hora / tiempo',c:'Tiempo',
+words:[['一時','いちじ']]}
+
+];
+
+
+const KEY='kanjiTrainerProgressV1';
+
+let saved;
+
+try{
+  saved=JSON.parse(localStorage.getItem(KEY)||'{}')
+}catch{
+  saved={}
+}
+
+
+const state={
+  mode:'kanji',
+  filter:'all',
+  cur:null,
+  answer:'',
+  locked:false,
+  streak:saved.streak||0,
+  stats:saved.stats||{
+    correct:0,
+    total:0
+  },
+  p:saved.p||{}
+};
+
+
+DATA.forEach(x=>{
+  state.p[x.k]??={
+    ok:0,
+    bad:0
+  }
+});
+
+
+const $=s=>document.querySelector(s);
+
+const shuffle=a=>
+  [...a].sort(()=>Math.random()-.5);
+
+
+function save(){
+
+  localStorage.setItem(
+    KEY,
+    JSON.stringify({
+      p:state.p,
+      stats:state.stats,
+      streak:state.streak
+    })
+  );
+
+}
+
+
+function pct(k){
+
+  let p=state.p[k];
+
+  let n=p.ok+p.bad;
+
+  return n
+    ? Math.round(p.ok/n*100)
+    : null;
+
+}
+
+
+function status(k){
+
+  let p=state.p[k];
+
+  let n=p.ok+p.bad;
+
+  let q=pct(k);
+
+  if(!n)
+    return 'Nuevo';
+
+  if(n>=5 && q>=85)
+    return 'Dominado';
+
+  if(n>=3 && q>=65)
+    return 'Casi dominado';
+
+  return 'Aprendiendo';
+
+}
+
+
+function eligible(){
+
+  let a=DATA;
+
+  if(state.filter==='new')
+    a=DATA.filter(
+      x=>state.p[x.k].ok+state.p[x.k].bad===0
+    );
+
+  if(state.filter==='weak')
+    a=DATA.filter(
+      x=>state.p[x.k].bad>0 &&
+      status(x.k)!=='Dominado'
+    );
+
+  return a.length
+    ? a
+    : DATA;
+
+}
+
+
+function choose(){
+
+  let a=eligible();
+
+  let w=[];
+
+  a.forEach(x=>{
+
+    let n=
+      1+
+      state.p[x.k].bad*2+
+      (status(x.k)==='Aprendiendo'?1:0);
+
+    for(let i=0;i<n;i++)
+      w.push(x);
+
+  });
+
+  return w[
+    Math.floor(Math.random()*w.length)
+  ];
+
+}
+
+
+function setup(){
+
+  state.locked=false;
+
+  $('#next').disabled=true;
+
+  let x=state.cur=choose();
+
+  let correct;
+  let prompt;
+  let q;
+  let pool;
+
+
+  if(state.mode==='kanji'){
+
+    prompt=x.k;
+    correct=x.kun;
+
+    q='¿Cómo se lee este kanji?';
+
+    pool=DATA.map(y=>y.kun);
+
+  }
+
+  else if(state.mode==='reading'){
+
+    prompt=x.kun;
+    correct=x.k;
+
+    q='¿Qué kanji corresponde a esta lectura?';
+
+    pool=DATA.map(y=>y.k);
+
+  }
+
+  else{
+
+    let word=
+      x.words[
+        Math.floor(
+          Math.random()*x.words.length
+        )
+      ];
+
+    prompt=word[0];
+    correct=word[1];
+
+    q='¿Cómo se lee esta palabra?';
+
+    pool=
+      DATA.flatMap(
+        y=>y.words.map(z=>z[1])
+      );
+
+  }
+
+
+  state.answer=correct;
+
+  $('#prompt').textContent=prompt;
+
+  $('#prompt').style.fontSize=
+    state.mode==='reading'
+      ? '58px'
+      : '';
+
+  $('#question').textContent=q;
+
+  $('#category').textContent=x.c;
+
+  $('#status').textContent=
+    status(x.k);
+
+  $('#feedback').textContent=
+    'Elige una respuesta. El significado aparece después para que primero pienses en japonés.';
+
+
+  let opts=
+    shuffle([
+      correct,
+      ...shuffle(
+        [...new Set(
+          pool.filter(v=>v!==correct)
+        )]
+      ).slice(0,3)
+    ]);
+
+
+  let box=$('#answers');
+
+  box.innerHTML='';
+
+
+  opts.forEach(v=>{
+
+    let b=
+      document.createElement('button');
+
+    b.className='answer jp';
+
+    b.textContent=v;
+
+    b.onclick=()=>answer(v,b);
+
+    box.appendChild(b);
+
+  });
+
+
+  render();
+
+}
+
+
+function answer(v,b){
+
+  if(state.locked)
+    return;
+
+  state.locked=true;
+
+  let ok=
+    v===state.answer;
+
+  state.stats.total++;
+
+
+  if(ok){
+
+    state.stats.correct++;
+
+    state.streak++;
+
+    state.p[state.cur.k].ok++;
+
+    b.classList.add('good');
+
+  }
+
+  else{
+
+    state.streak=0;
+
+    state.p[state.cur.k].bad++;
+
+    b.classList.add('bad');
+
+  }
+
+
+  [...$('#answers').children]
+    .forEach(el=>{
+
+      el.disabled=true;
+
+      if(el.textContent===state.answer)
+        el.classList.add('good');
+
+    });
+
+
+  let ex=
+    state.cur.words[0];
+
+
+  $('#feedback').innerHTML=
+
+    (ok
+      ? '<strong>✓ Correcto.</strong> '
+      : '<strong>✗ Aún no.</strong> ')
+
+    +
+
+    '<span class="jp">'+
+    state.cur.k+
+    ' → '+
+    state.answer+
+    '</span> · '+
+    state.cur.m+
+
+    '<br>Ejemplo: <span class="jp">'+
+    ex[0]+
+    '（'+
+    ex[1]+
+    '）</span>';
+
+
+  $('#next').disabled=false;
+
+  save();
+
+  render();
+
+}
+
+
+function render(){
+
+  let statuses=
+    DATA.map(
+      x=>status(x.k)
+    );
+
+
+  let worked=
+    DATA.filter(
+      x=>
+        state.p[x.k].ok+
+        state.p[x.k].bad>0
+    ).length;
+
+
+  let master=
+    statuses.filter(
+      s=>s==='Dominado'
+    ).length;
+
+
+  let almost=
+    statuses.filter(
+      s=>s==='Casi dominado'
+    ).length;
+
+
+  let learn=
+    statuses.filter(
+      s=>s==='Aprendiendo'
+    ).length;
+
+
+  $('#mastered').textContent=
+    master;
+
+
+  $('#accuracy').textContent=
+    state.stats.total
+      ? Math.round(
+          state.stats.correct/
+          state.stats.total*
+          100
+        )+'%'
+      : '—';
+
+
+  $('#answered').textContent=
+    state.stats.total;
+
+
+  $('#streak').textContent=
+    state.streak;
+
+
+  $('#worked').textContent=
+    worked+' / '+DATA.length;
+
+
+  $('#bar').style.width=
+    Math.round(
+      worked/DATA.length*100
+    )+'%';
+
+
+  $('#lMaster').textContent=
+    master;
+
+  $('#lAlmost').textContent=
+    almost;
+
+  $('#lLearn').textContent=
+    learn;
+
+  $('#lNew').textContent=
+    DATA.length-
+    master-
+    almost-
+    learn;
+
+
+  let list=
+    $('#kanjiList');
+
+  list.innerHTML='';
+
+
+  DATA.forEach(x=>{
+
+    let s=
+      status(x.k);
+
+    let q=
+      pct(x.k);
+
+
+    let cls=
+
+      s==='Dominado'
+        ? 'master'
+
+      :s==='Casi dominado'
+        ? 'almost'
+
+      :s==='Aprendiendo'
+        ? 'learn'
+
+      :'new';
+
+
+    let d=
+      document.createElement('div');
+
+
+    d.className='krow';
+
+
+    d.innerHTML=
+
+      '<span class="glyph jp">'+
+      x.k+
+      '</span>'+
+
+      '<span>'+
+      '<b class="jp">'+
+      x.kun+
+      '</b><br>'+
+      '<small>'+
+      x.m+
+      '</small>'+
+      '</span>'+
+
+      '<span class="pill '+cls+'">'+
+      (q===null?s:q+'%')+
+      '</span>';
+
+
+    list.appendChild(d);
+
+  });
+
+}
+
+
+$('#next').onclick=
+  setup;
+
+
+document
+.querySelectorAll('[data-mode]')
+.forEach(b=>
+
+  b.onclick=()=>{
+
+    state.mode=
+      b.dataset.mode;
+
+    document
+    .querySelectorAll('[data-mode]')
+    .forEach(
+      x=>x.classList.remove('active')
+    );
+
+    b.classList.add('active');
+
+    setup();
+
+  }
+
+);
+
+
+document
+.querySelectorAll('[data-filter]')
+.forEach(b=>
+
+  b.onclick=()=>{
+
+    state.filter=
+      b.dataset.filter;
+
+    setup();
+
+  }
+
+);
+
+
+setup();
+
+</script>
+
+</body>
+</html>
