@@ -1074,6 +1074,21 @@ document
 setup();
 
 </script>
+</script>
 
+<script>
+  const SUPABASE_URL = 'https://cdshkqfrzcschdoosxty.supabase.co';
+  const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_vy7FwDZiHS4vlmkBpFDOUw_yccOKS41';
+
+  const db = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+  console.log('Supabase conectado:', db);
+</script>
+
+</body>
+</html>
 </body>
 </html>
