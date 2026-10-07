@@ -1,4 +1,4 @@
-<main class="app"><!doctype html>
+<!doctype html>
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -1086,20 +1086,21 @@ setup();
   );
 
   console.log('Supabase conectado:', db);
+
   async function probarConexion() {
-  const { data, error } = await db
-    .from('kanji')
-    .select('character, meaning_es')
-    .limit(3);
+    const { data, error } = await db
+      .from('kanji')
+      .select('character, meaning_es')
+      .limit(3);
 
-  if (error) {
-    console.error('❌ Error al leer Supabase:', error);
-  } else {
-    console.log('✅ Kanji recibidos desde Supabase:', data);
+    if (error) {
+      console.error('❌ Error al leer Supabase:', error);
+    } else {
+      console.log('✅ Kanji recibidos desde Supabase:', data);
+    }
   }
-}
 
-probarConexion();
+  probarConexion();
 </script>
 
 </body>
