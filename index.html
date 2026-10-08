@@ -1,1108 +1,1359 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Kanji Trainer N5</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Kanji Trainer</title>
+  <style>
 
-<style>
-:root{
-  --ink:#20303a;
-  --muted:#68747b;
-  --paper:#fbf7ef;
-  --card:#fffdf9;
-  --line:#e6ded2;
-  --red:#d84d4d;
-  --pink:#f8dddd;
-  --green:#2f8c68;
-  --orange:#d9822b
+:root{--red:#c92e34;--dark:#171b20;--cream:#fff8ef;--paper:#fffaf5;--line:#ead9ca;--ink:#171a1e;--muted:#665f59}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#faecdf;color:var(--ink);font-family:Georgia,"Times New Roman",serif}.jp{font-family:"Yu Mincho","Hiragino Mincho ProN","Noto Serif JP",serif}
+button{font:inherit}.app{min-height:100vh;display:grid;grid-template-columns:204px 1fr}.sidebar{position:relative;min-height:100vh;overflow:hidden;background:radial-gradient(circle at 80% 83%,#d72f36 0 52px,transparent 53px),linear-gradient(155deg,#101317,#20262b);padding:30px 17px;color:#fff}
+.sidebar:before{content:"✿ ✿";position:absolute;top:-8px;left:-8px;color:#ef7c82;font-size:32px;transform:rotate(-10deg)}.brand{text-align:center}.seal{width:62px;height:62px;margin:auto;border-radius:50%;background:#ef5946;color:#151515;display:grid;place-items:center;font-size:38px}.brand-name{letter-spacing:.32em;line-height:1.45;margin:8px 0 15px}.brand-name span{font-size:13px}
+nav{display:grid;gap:6px}.nav,.level{width:100%;border:0;background:transparent;color:#d8d8d8;border-radius:10px;padding:10px 13px;text-align:left}.nav span,.level span{margin-left:10px}.nav.active,.level.active{background:linear-gradient(90deg,#bb252c,#d63739);color:#fff}.divider{height:1px;background:#ffffff30;margin:17px 4px 10px}.level b{float:right}.level:disabled,.nav:disabled{opacity:.75}.sidebar-scene{position:absolute;left:0;right:0;bottom:0;height:190px}.torii{position:absolute;bottom:-8px;left:20px;font-size:118px;color:#080b0e}.mountain{position:absolute;bottom:0;width:100%;height:90px;background:linear-gradient(155deg,transparent 35%,#252e34 36% 55%,#11171b 56%);opacity:.9}.flowers{position:absolute;left:2px;bottom:52px;color:#ed737a;font-size:29px}
+main{min-width:0;background:linear-gradient(90deg,#fff8ef,#faebdc)}.hero{height:165px;position:relative;overflow:hidden;background:linear-gradient(#fff0e2,#f7e3d5)}.branch{position:absolute;top:-5px;left:8px;color:#ef777e;font-size:32px;letter-spacing:8px}.red-sun{position:absolute;right:200px;top:18px;width:100px;height:100px;border-radius:50%;background:#dd3538}.fuji{position:absolute;right:75px;bottom:-15px;font-size:100px;color:#75818b3b;transform:scaleX(1.5)}.pagoda{position:absolute;right:15px;bottom:-8px;font-size:70px;color:#1e252b}.account{position:absolute;right:20px;top:21px;font:14px Arial,sans-serif}.hello{position:absolute;left:48px;bottom:14px}.hello h1{font-size:34px;margin:0}.hello .jp{font-size:19px;margin-top:3px}.hello span{color:var(--red)}
+.content{padding:0 29px 14px}.card{background:#fffaf5e8;border:1px solid var(--line);border-radius:15px;box-shadow:0 3px 12px #6b3e1d0b}.level-row{display:grid;grid-template-columns:1fr 210px;gap:12px}.current{height:72px;padding:10px 20px;display:grid;grid-template-columns:58px 1fr 85px;gap:14px;align-items:center}.n5{width:51px;height:51px;border-radius:50%;background:#f8d9d3;display:grid;place-items:center;font-size:23px}.grow h2{margin:0;font-size:18px}.grow small,.score small{font-size:11px;color:#625e5a}.bar{height:7px;background:#e6ddd5;border-radius:20px;margin-top:7px}.bar i{display:block;width:40%;height:100%;background:var(--red);border-radius:20px}.score strong{display:block;color:var(--red);font-size:24px}.switch{display:grid;place-items:center;font:13px Arial,sans-serif}
+.features{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-top:13px}.feature{min-height:165px;padding:19px;position:relative}.icon{font-size:34px}.icon.red{color:var(--red)}.feature h2{font-size:20px;margin:8px 0 5px}.feature p{font-size:12px;line-height:1.4;color:#514c48;max-width:180px}.feature button{position:absolute;right:14px;bottom:14px;width:32px;height:32px;border:0;border-radius:50%;background:#202428;color:#fff}.feature:first-child button{background:var(--red)}
+.lower{display:grid;grid-template-columns:1.2fr .92fr;gap:13px;margin-top:13px}.today{padding:14px 19px}.title{display:flex;justify-content:space-between;align-items:center}.title h2{font-size:17px;margin:0}.title span{font-size:11px;color:var(--red)}.goal{position:relative;background:#fae1d9;border-radius:12px;padding:13px 18px;margin-top:10px;min-height:118px}.goal label{display:block;font-size:12px;line-height:1.9}.flash{position:absolute;right:45px;top:20px;background:#fffaf4;padding:10px 24px;font-size:50px;transform:rotate(7deg);box-shadow:7px 7px #eadfd5}.start{width:58%;border:0;border-radius:999px;background:linear-gradient(90deg,#bd2229,#d4383a);color:#fff;padding:11px;margin-top:9px}.right{display:grid;gap:9px}.areas,.recent{padding:12px 16px}.areas h2{font-size:15px;margin:0}.rings{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px;text-align:center}.rings i{display:grid;place-items:center;width:54px;height:54px;border-radius:50%;margin:auto;background:conic-gradient(var(--c) var(--p),#ecdfd5 0)}.rings i:after{content:attr(data-p);width:43px;height:43px;border-radius:50%;background:#fffaf5;display:grid;place-items:center;color:var(--c);font-style:normal;font-weight:bold;font-size:11px}.rings small{font-size:9px}.kanjis{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:7px}.kanjis>div{text-align:center;border:1px solid #eadfd5;border-radius:9px;padding:4px}.kanjis b{font-size:25px}.kanjis small{display:block;font-size:9px}.quote{height:75px;border:1px solid var(--line);border-radius:14px;margin-top:12px;text-align:center;padding:10px;background:linear-gradient(90deg,#f4c4b6,#fff0e3,#efd3c5)}.quote .jp{font-size:25px}.quote small{font-size:11px}
+@media(max-width:900px){.features{grid-template-columns:1fr 1fr}.lower{grid-template-columns:1fr}}@media(max-width:700px){.app{display:block}.sidebar{display:none}.level-row{grid-template-columns:1fr}.switch{display:none}.content{padding:12px}.hero{height:145px}}
+
+
+[hidden]{display:none!important}.redtext{color:var(--red)}.learn-view{padding-top:20px}.learn-heading{display:flex;justify-content:space-between;align-items:end;margin-bottom:13px}.learn-heading h1{font-size:29px;margin:0}.learn-heading p,.muted{font-size:13px;color:var(--muted);margin:4px 0}.counter{font-size:12px}.counter b{color:var(--red);font-size:16px;margin-left:6px}.learn-grid{display:grid;grid-template-columns:minmax(330px,.9fr) minmax(430px,1.25fr);gap:14px}.learn-kanji{padding:22px;display:flex;flex-direction:column;align-items:center}.learn-tag{align-self:flex-start;background:#f7ddd5;color:#a3282d;border-radius:999px;padding:6px 12px;font-size:12px}.learn-glyph{font-size:155px;line-height:1;margin:16px 0 4px;text-shadow:4px 4px #eeded3}.learn-meaning{font-size:27px;color:var(--red);font-weight:bold}.learn-meta{display:flex;gap:8px;margin-top:15px}.learn-meta span{background:#f8eadc;border:1px solid var(--line);border-radius:9px;padding:7px 10px;font-size:12px}.memory{margin-top:18px;width:100%;background:#fae2da;border-radius:12px;padding:13px 16px;font-size:12px;line-height:1.45}.learn-info{padding:20px}.learn-info h2{font-size:19px;margin:0}.reading-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:14px}.reading{border:1px solid var(--line);border-radius:13px;padding:14px;background:#fff7ef}.reading.kun{border-top:4px solid #e98556}.reading.on{border-top:4px solid #d65a61}.reading small{color:var(--muted);font-size:10px}.reading strong{display:block;font-size:28px;margin:7px 0}.reading p{font-size:11px;color:var(--muted);margin:0}.vtitle{margin-top:17px!important}.vrow{display:grid;grid-template-columns:90px 115px 1fr;gap:10px;align-items:center;border-bottom:1px solid var(--line);padding:10px 4px}.vrow .jp:first-child{font-size:23px}.vrow .jp:nth-child(2){color:var(--red)}.vrow span:last-child{font-size:12px}.learn-actions{display:grid;grid-template-columns:1fr 1fr 1.25fr;gap:10px;margin-top:13px}.learn-actions button{border:1px solid var(--line);border-radius:999px;padding:11px;background:#fffaf4;font-family:Georgia,serif;cursor:pointer}.learn-next{background:linear-gradient(90deg,#b92329,#d13739)!important;color:white;border:0!important}
+@media(max-width:900px){.learn-grid{grid-template-columns:1fr}}@media(max-width:700px){.reading-grid,.learn-actions{grid-template-columns:1fr}}
+
+
+.practice-view{padding-top:20px}.practice-modes{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:13px}.pmode{border:1px solid var(--line);background:#fffaf4;border-radius:999px;padding:8px 13px;font-family:Georgia,serif;font-size:12px;cursor:pointer}.pmode.active{background:#f5d9d3;color:#a6252b;border-color:#eebbb6}.practice-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:14px}.question-card{min-height:365px;padding:23px 28px;text-align:center;display:flex;flex-direction:column;align-items:center}.question-card .learn-tag{align-self:flex-start}.practice-main{font-size:105px;line-height:1.15;margin:12px 0 18px}.practice-main.text{font-family:Georgia,serif;font-size:32px;margin:32px 0}.answers{width:min(590px,100%);display:grid;grid-template-columns:1fr 1fr;gap:10px}.panswer{border:1px solid var(--line);background:#fff7ef;border-radius:12px;padding:13px;font-family:Georgia,serif;font-size:15px;cursor:pointer}.panswer:hover{border-color:#d66b68;background:#fae5df}.panswer.good{background:#eaf6ef;border-color:#76b99c;color:#226b50}.panswer.bad{background:#fde9e7;border-color:#dd8b88;color:#992d31}.feedback{width:min(590px,100%);margin-top:13px;padding:12px 15px;border-radius:12px;background:#f8eee5;border:1px solid var(--line);font-size:13px}.practice-next{margin-top:12px;border:0;border-radius:999px;background:linear-gradient(90deg,#b92329,#d13739);color:white;padding:11px 28px;font-family:Georgia,serif;cursor:pointer}.session-card{padding:19px}.session-card h2{margin:0 0 12px;font-size:19px}.session-note{background:#fae2da;border-radius:12px;padding:13px;font-size:12px;line-height:1.45}.session-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:11px}.session-stats>div{border:1px solid var(--line);border-radius:11px;padding:11px;text-align:center;background:#fff7ef}.session-stats strong{display:block;font-size:22px;color:var(--red)}.session-stats small{font-size:10px}.session-tip{margin-top:13px;color:var(--muted);font-size:12px;line-height:1.5}
+@media(max-width:900px){.practice-grid{grid-template-columns:1fr}}@media(max-width:700px){.answers{grid-template-columns:1fr}}
+
+
+.review-view{padding-top:20px}.review-empty{padding:34px;text-align:center;max-width:720px;margin:25px auto}.review-symbol{width:82px;height:82px;border-radius:50%;display:grid;place-items:center;margin:auto;background:#f6ddd6;color:var(--red);font-size:42px}.review-empty h2{margin:15px 0 7px}.review-empty p{max-width:540px;margin:0 auto 18px;color:var(--muted);font-size:13px;line-height:1.55}.review-empty button{border:0;border-radius:999px;background:linear-gradient(90deg,#b92329,#d13739);color:white;padding:11px 25px;font-family:Georgia,serif;cursor:pointer}.review-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:14px}.review-list{display:flex;flex-direction:column;gap:8px}.review-item{display:grid;grid-template-columns:42px 1fr auto;align-items:center;gap:9px;padding:9px;border:1px solid var(--line);border-radius:11px;background:#fff7ef}.review-item .jp{font-size:26px}.review-item b{font-size:12px}.review-item small{display:block;color:var(--muted);font-size:10px}.review-item span:last-child{font-size:10px;color:#a72a30;background:#f7ddd5;padding:4px 7px;border-radius:999px}
+@media(max-width:900px){.review-grid{grid-template-columns:1fr}}
+
+
+.progress-view{padding-top:20px}.progress-summary{display:grid;grid-template-columns:1.05fr .95fr;gap:14px}.summary-main{padding:20px;display:flex;align-items:center;gap:20px}.summary-circle{width:104px;height:104px;flex:0 0 104px;border-radius:50%;background:conic-gradient(var(--red) 0deg,#eadfd5 0deg);display:grid;place-content:center;text-align:center;position:relative}.summary-circle:after{content:"";position:absolute;inset:10px;background:#fffaf4;border-radius:50%}.summary-circle span,.summary-circle small{position:relative;z-index:1}.summary-circle span{font-size:24px;font-weight:bold}.summary-circle small{font-size:9px;color:var(--muted)}.summary-main h2{margin:0 0 5px}.summary-main p{font-size:12px;color:var(--muted);margin:0 0 10px}.summary-bar{height:8px;background:#eadfd5;border-radius:999px;overflow:hidden;margin-bottom:6px}.summary-bar i{display:block;height:100%;width:0;background:var(--red);border-radius:999px}.summary-main small{font-size:10px;color:var(--muted)}.skill-summary{padding:17px;display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.skill-box{border:1px solid var(--line);border-radius:11px;background:#fff7ef;padding:10px}.skill-box div{display:flex;justify-content:space-between;font-size:11px;margin-bottom:7px}.skill-box b{color:var(--red)}.mini-bar{height:6px;background:#eadfd5;border-radius:99px;overflow:hidden}.mini-bar i{display:block;height:100%;background:#c95858}.progress-title{display:flex;justify-content:space-between;align-items:end;margin:18px 2px 9px}.progress-title h2{font-size:19px;margin:0}.progress-title p,.progress-title span{font-size:11px;color:var(--muted);margin:3px 0}.kanji-progress-list{display:grid;grid-template-columns:1fr 1fr;gap:10px}.kp-card{background:#fffaf4;border:1px solid var(--line);border-radius:14px;padding:13px;display:grid;grid-template-columns:65px 1fr;gap:13px}.kp-kanji{text-align:center}.kp-kanji .jp{font-size:42px;line-height:1}.kp-kanji b{display:block;font-size:11px;margin-top:5px}.kp-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.kp-head strong{font-size:12px}.mastery-pill{font-size:10px;background:#f5ddd6;color:#a72a30;border-radius:99px;padding:4px 8px}.skill-line{display:grid;grid-template-columns:74px 1fr 34px;align-items:center;gap:7px;margin:5px 0;font-size:9px;color:var(--muted)}.skill-line .mini-bar{height:5px}.skill-line em{font-style:normal;text-align:right;color:#444}
+@media(max-width:900px){.progress-summary,.kanji-progress-list{grid-template-columns:1fr}}
+
+
+.study-plan-launch{display:flex;justify-content:flex-end;margin:-4px 0 10px}.study-plan-launch button{border:1px solid #e6c6bc;background:#fff7ef;color:#9e292e;border-radius:999px;padding:9px 15px;font-family:Georgia,serif;cursor:pointer}.plan-overlay{position:fixed;inset:0;background:rgba(28,25,24,.58);z-index:50;display:grid;place-items:center;padding:20px}.plan-modal{width:min(650px,94vw);max-height:90vh;overflow:auto;background:#fffaf4;border-radius:20px;padding:25px;position:relative;border:1px solid #e5cfc4;box-shadow:0 20px 60px rgba(0,0,0,.22)}.plan-close{position:absolute;right:16px;top:12px;border:0;background:none;font-size:28px;cursor:pointer}.plan-head{text-align:center}.plan-head .jp{color:var(--red);font-size:25px}.plan-head h2{margin:3px 0}.plan-head p{font-size:12px;color:var(--muted);margin:0 0 18px}.plan-form{display:grid;grid-template-columns:1fr 1fr;gap:11px}.plan-form label{font-size:11px;color:var(--muted)}.plan-form input,.plan-form select{box-sizing:border-box;width:100%;margin-top:5px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px;font:14px Georgia,serif}.plan-result{margin:17px 0;background:#f8e4dc;border-radius:14px;padding:16px;text-align:center}.plan-big{font-size:30px;color:var(--red);font-weight:bold}.plan-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.plan-metrics div{background:#fff8f1;border-radius:10px;padding:9px}.plan-metrics b{display:block;font-size:17px}.plan-metrics small{font-size:9px;color:var(--muted)}.plan-save{display:block;margin:auto;border:0;border-radius:999px;background:linear-gradient(90deg,#b92329,#d13739);color:white;padding:11px 28px;font-family:Georgia,serif;cursor:pointer}.plan-note{font-size:10px;color:var(--muted);margin-top:9px}@media(max-width:600px){.plan-form{grid-template-columns:1fr}.plan-metrics{grid-template-columns:1fr}}
+
+
+.plan-inline-link{border:0;background:none;color:#b5232a;font:inherit;cursor:pointer;padding:0}.goal.goal-split{display:grid;grid-template-columns:1fr;gap:18px;align-items:stretch;padding-right:18px}.today-tasks{display:flex;flex-direction:column;justify-content:center;gap:7px;min-width:0}.today-tasks>b{font-size:20px}.today-plan{background:rgba(255,250,244,.76);border:1px solid rgba(184,81,70,.18);border-radius:15px;padding:13px 14px;min-width:0}.today-plan-top{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#8e2b30}.today-plan-top button{border:0;background:none;color:#b5232a;font:inherit;cursor:pointer;text-decoration:underline}.today-plan>strong{display:block;font-size:18px;margin:5px 0 9px}.today-plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.today-plan-grid div{text-align:center;border-right:1px solid #ead4cb}.today-plan-grid div:last-child{border-right:0}.today-plan-grid b{display:block;font-size:18px;color:#a9272d}.today-plan-grid small{display:block;font-size:8px;color:var(--muted);line-height:1.15}.today-plan p{font-size:9px;color:var(--muted);margin:8px 0 0;text-align:center}.today .start{margin-top:13px}
+@media(max-width:760px){.goal.goal-split{grid-template-columns:1fr}.today-plan-grid{grid-template-columns:repeat(3,1fr)}}
+
+
+.plan-page-card{padding:22px;max-width:850px}.plan-page-intro{display:flex;gap:14px;align-items:center;margin-bottom:18px}.plan-page-intro>.jp{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:#f6ddd6;color:var(--red);font-size:29px}.plan-page-intro h2{margin:0 0 4px}.plan-page-intro p{margin:0;color:var(--muted);font-size:12px}.plan-page-form{grid-template-columns:repeat(2,1fr)}.today-plan.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:145px}.today-plan.empty .empty-icon{font-size:25px}.today-plan.empty strong{margin:5px 0 3px}.today-plan.empty p{font-size:10px;max-width:210px}.today-plan.empty button{margin-top:8px;border:0;border-radius:999px;background:#c62b31;color:#fff;padding:8px 15px;font-family:Georgia,serif;cursor:pointer}
+@media(max-width:650px){.plan-page-form{grid-template-columns:1fr}}
+
+
+.goal.goal-split:has(.today-plan:not([hidden])){grid-template-columns:1.15fr .85fr}
+
+#pagePlanLearned[readonly], #planLearned[readonly]{
+  background:#f7f1ea;
+  color:#555;
+  cursor:default;
 }
 
-*{box-sizing:border-box}
+.features{grid-template-columns:repeat(5,minmax(0,1fr))}.context-feature .icon{font-family:serif}.context-card{padding:24px;min-height:390px;text-align:center}.context-instruction{font-size:12px;color:var(--muted);margin:15px 0 8px}.context-sentence{font-size:31px;line-height:1.6;background:#fff7ef;border:1px solid var(--line);border-radius:14px;padding:18px;margin:8px 0 15px}.context-blank{display:inline-block;min-width:46px;border-bottom:2px solid var(--red);color:var(--red);font-weight:bold}.context-options{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.context-option{min-width:68px;border:1px solid var(--line);background:#fffaf4;border-radius:12px;padding:11px 15px;font-family:Georgia,serif;font-size:23px;cursor:pointer}.reading-options .context-option{font-size:17px;min-width:90px}.context-option.good{background:#eaf6ef;border-color:#76b99c;color:#226b50}.context-option.bad{background:#fde9e7;border-color:#dd8b88;color:#992d31}@media(max-width:1100px){.features{grid-template-columns:repeat(3,1fr)}}@media(max-width:700px){.features{grid-template-columns:1fr}}
 
-body{
-  margin:0;
-  font-family:system-ui,-apple-system,"Segoe UI","Noto Sans JP",sans-serif;
-  background:linear-gradient(135deg,#fbf7ef,#f6f1e8);
-  color:var(--ink)
+
+.local-save-note{text-align:center;font-size:10px;color:var(--muted);margin:10px 0 0}
+
+.guided-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-bottom:18px;overflow:hidden}
+.guided-summary>div{padding:18px 20px;border-right:1px solid #eadfd5}
+.guided-summary>div:last-child{border-right:0}
+.guided-summary small{display:block;font-size:9px;letter-spacing:1.3px;color:var(--muted);margin-bottom:5px}
+.guided-summary strong{font-family:Georgia,serif;font-size:24px;color:var(--red)}
+.guided-kanji-list{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.guided-kanji-card{padding:20px;position:relative}
+.guided-kanji-card .ghead{display:flex;gap:18px;align-items:center;margin-bottom:14px}
+.guided-kanji-card .glyph{font-family:serif;font-size:58px;line-height:1;color:#222}
+.guided-kanji-card h3{margin:0 0 4px;font-family:Georgia,serif;font-size:19px}
+.guided-kanji-card p{margin:3px 0;color:var(--muted);font-size:12px}
+.guided-kanji-card .readings{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.guided-kanji-card .readings span,.guided-kanji-card .example{background:#fbf4ef;border-radius:9px;padding:9px 11px;font-size:11px}
+.guided-kanji-card .status{position:absolute;right:16px;top:16px;font-size:9px;padding:5px 9px;border-radius:99px;background:#f4e9e2;color:var(--red)}
+.guided-kanji-card .status.done{background:#e5f3ea;color:#26724d}
+.guided-actions{margin-top:18px;padding:18px 20px;display:flex;align-items:center;justify-content:space-between}
+.guided-actions h2{margin:0 0 5px;font-family:Georgia,serif;font-size:17px}
+.guided-actions p{margin:0;color:var(--muted);font-size:11px}
+.guided-actions button{border:0;border-radius:99px;background:var(--red);color:white;padding:12px 18px;font-weight:700;cursor:pointer}
+@media(max-width:850px){.guided-summary,.guided-kanji-list{grid-template-columns:1fr 1fr}}
+
+.gs-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:0 0 18px}
+.gs-steps>div{background:#f5e9df;border:1px solid #ead6c8;border-radius:12px;padding:9px;text-align:center;font-weight:700;color:#9b8577;font-size:12px}
+.gs-steps>div span{display:block;font-size:9px;font-weight:500;margin-top:3px}
+.gs-steps>div.active{background:#f5d8d2;border-color:#c92d32;color:#a81f25}
+.gs-steps>div.done{background:#e5f3ea;border-color:#bcdcc8;color:#26724d}
+.gs-detail{max-width:620px;margin:0 auto 16px;text-align:center;line-height:1.65;color:#65564d}
+.gs-detail .reading-boxes{display:flex;justify-content:center;gap:10px;margin-top:10px}
+.gs-detail .reading-boxes span{background:#fbf4ef;border-radius:9px;padding:8px 12px}
+.gs-mini{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee0d5;padding:11px 0;font-size:11px}
+.gs-mini b{font-size:18px;color:var(--red)}
+.gs-status-list{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px}
+.gs-status-list span{border-radius:99px;padding:5px 8px;background:#f3e8df;font-size:10px}
+.gs-status-list span.done{background:#e5f3ea;color:#26724d}
+.gs-known{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:600px;margin:0 auto}
+.gs-known button{border:1px solid #ead6c8;background:#fffaf6;border-radius:12px;padding:14px;cursor:pointer;font-size:13px}
+.gs-known button:first-child{background:#e8f4ec;color:#26724d}
+.gs-known button:last-child{background:#fae3df;color:#a81f25}
+
+/* Paso 13 · Sesión guiada: rediseño visual */
+#guidedSessionView{max-width:1180px}
+#guidedSessionView .practice-grid{grid-template-columns:minmax(0,1fr) 285px;gap:18px;align-items:start}
+#guidedSessionView .practice-card{padding:28px 34px 32px;min-height:540px;border-radius:22px}
+#guidedSessionView .session-card{padding:22px;border-radius:20px}
+.gs-steps{gap:12px;margin-bottom:24px}
+.gs-steps>div{min-height:72px;display:flex;flex-direction:column;justify-content:center;border-radius:18px;background:#f8f4ef;border:1px solid #e6ddd5;font-family:Georgia,serif;font-size:18px}
+.gs-steps>div span{font-family:inherit;font-size:11px;letter-spacing:.1px;margin-top:4px}
+.gs-steps>div.active{background:#f8dcd7;border:1.5px solid #cf3036;box-shadow:0 5px 14px rgba(161,40,45,.08)}
+.gs-steps>div.done{background:#e8f3ec;border-color:#c6dfd0;color:#337a58}
+#guidedSessionView .learn-tag{display:inline-block;padding:7px 15px;border-radius:99px;background:#f6ddd7;color:#a9272d;font-size:11px;letter-spacing:.5px}
+#guidedSessionView .practice-prompt{font-family:Georgia,serif;font-size:25px;font-weight:700;color:#202934;margin:22px 0 6px}
+#guidedSessionView .practice-main{font-family:Georgia,serif;font-size:48px;line-height:1.12;margin:24px auto;text-align:center;color:#18222d}
+#guidedSessionView .practice-main.jp{font-family:"Yu Mincho","Hiragino Mincho ProN","Noto Serif JP",serif;font-size:112px;font-weight:500}
+.gs-reading-chip{display:inline-flex;align-items:center;gap:8px;margin-top:4px;padding:8px 15px;border:1px solid #efcfc8;background:#fff7f3;border-radius:99px;color:#a72a30;font-family:"Yu Mincho","Noto Serif JP",serif;font-size:20px}
+#guidedSessionView .answers{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:22px auto 0;max-width:760px}
+#guidedSessionView .answer{min-height:78px;padding:15px 18px;border:1px solid #e3d5ca;border-radius:16px;background:#fffaf6;color:#1f2933;font-family:Georgia,serif;font-size:19px;cursor:pointer;transition:.15s ease}
+#guidedSessionView .answer:hover{transform:translateY(-1px);border-color:#cf3036;background:#fff3ef}
+#guidedSessionView .answer.correct{border:2px solid #4a9b72;background:#eaf5ee;color:#246746}
+#guidedSessionView .answer.wrong{border:2px solid #d34a4e;background:#fbe6e3;color:#a32429}
+#guidedSessionView .practice-feedback{max-width:760px;margin:16px auto 0}
+#guidedSessionView .nextq{float:right;border:0;border-radius:99px;background:#c92f36;color:#fff;padding:11px 20px;cursor:pointer;font-weight:700}
+.gs-detail{font-size:13px}
+.gs-detail .reading-boxes span{padding:10px 16px;border:1px solid #eadbd0;background:#fff9f5}
+.gs-known{max-width:760px}
+.gs-known button{min-height:60px;font-family:Georgia,serif;font-size:16px}
+.gs-status-list span{font-family:"Yu Mincho","Noto Serif JP",serif;font-size:13px;padding:6px 10px}
+@media(max-width:900px){
+ #guidedSessionView .practice-grid{grid-template-columns:1fr}
+ .gs-steps{grid-template-columns:repeat(5,minmax(105px,1fr));overflow-x:auto}
 }
 
-button{font:inherit}
-
-.app{
-  max-width:1180px;
-  margin:auto;
-  padding:22px
+/* Paso 14 · ajustes pedagógicos */
+#guidedSessionView .practice-main.gs-sentence{
+  font-family:"Yu Mincho","Hiragino Mincho ProN","Noto Serif JP",serif;
+  font-size:38px;
+  line-height:1.55;
+  max-width:760px;
+  margin:24px auto 28px;
+  white-space:normal;
 }
-
-.hero{
-  background:linear-gradient(100deg,#fff9f1,#f8e7e2);
-  border:1px solid var(--line);
-  border-radius:24px;
-  padding:22px 26px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:18px;
-  overflow:hidden
-}
-
-.hero h1{
-  margin:0;
-  font-family:Georgia,serif;
-  font-size:34px
-}
-
-.jp{
-  font-family:"Yu Mincho","Noto Serif JP",serif
-}
-
-.hero .mark{
-  font-size:44px;
-  background:#f4c9c4;
-  border-radius:50%;
-  width:70px;
-  height:70px;
-  display:grid;
-  place-items:center
-}
-
-.sub{
-  color:var(--muted);
-  margin-top:5px
-}
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:10px;
-  margin:18px 0
-}
-
-.stat,.card{
-  background:rgba(255,253,249,.9);
-  border:1px solid var(--line);
-  border-radius:18px
-}
-
-.stat{
-  padding:14px;
-  text-align:center
-}
-
-.stat b{
-  display:block;
-  font-size:24px
-}
-
-.stat small{
-  color:var(--muted)
-}
-
-.tabs{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-bottom:15px
-}
-
-.tabs button,.ghost{
-  border:1px solid var(--line);
-  background:var(--card);
-  border-radius:12px;
-  padding:11px 15px;
-  cursor:pointer
-}
-
-.tabs button.active{
-  border-color:var(--red);
-  background:#fff1ef;
-  color:#a72f2f
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:minmax(0,1.55fr) minmax(280px,.75fr);
-  gap:16px
-}
-
-.quiz{padding:22px}
-
-.topline{
-  display:flex;
-  justify-content:space-between;
-  color:var(--muted);
-  font-size:14px
-}
-
-.kanji{
-  font-size:116px;
-  text-align:center;
-  margin:18px 0 8px;
-  line-height:1
-}
-
-.question{
-  text-align:center;
-  font-weight:650
-}
-
-.answers{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin:20px 0
-}
-
-.answer{
-  min-height:62px;
-  border:1px solid var(--line);
-  border-radius:15px;
-  background:white;
+#guidedSessionView .answer.jp{
+  font-family:"Yu Mincho","Hiragino Mincho ProN","Noto Serif JP",serif;
   font-size:25px;
-  cursor:pointer
 }
 
-.answer:hover{border-color:#c8aaa3}
-.answer.good{outline:3px solid #a9d8c2}
-.answer.bad{outline:3px solid #efb1aa}
-
-.feedback{
-  min-height:65px;
-  background:#faf2e8;
-  border-radius:14px;
-  padding:13px;
-  color:var(--muted)
+#guidedSessionView .answer.gs-kanji-option{
+ font-family:"Yu Mincho","Hiragino Mincho ProN","Noto Serif JP",serif;
+ font-size:42px;
+ min-height:96px;
 }
 
-.feedback strong{color:var(--ink)}
+.guided-section-label{grid-column:1/-1;font-family:Georgia,serif;font-size:13px;font-weight:700;color:#6d5a4d;padding:5px 2px 0}
+.guided-section-label.review-label{color:#a52a30;margin-top:2px}
+.guided-kanji-card.review-card{border:1px solid #e8c9c2;background:#fff9f6}
 
-.actions{
-  display:flex;
-  gap:10px;
-  margin-top:12px
-}
+.home-plan-days{margin-top:13px;padding-top:12px;border-top:1px solid #ead4cc}
+.hpd-title{display:flex;justify-content:space-between;gap:12px;align-items:center;font-size:12px;color:#8d655c;margin-bottom:9px}
+.hpd-title b{color:#a9232b;font-weight:700}
+.hpd-row{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.hpd-day{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;border:1px solid #dec9c0;background:#fffaf7;color:#7d6a61;font:700 12px Arial,sans-serif}
+.hpd-day.done{background:#e8f1e8;border-color:#b9d1bb;color:#47724b}
+.hpd-day.active{background:#b8202a;border-color:#b8202a;color:white;box-shadow:0 0 0 3px #f4d8d5}
+.hpd-next{margin-top:9px;font-size:12px;font-weight:700;color:#a9232b;display:flex;justify-content:space-between;align-items:center}
+.hpd-next.complete{color:#47724b}
 
-.primary{
-  flex:1;
-  border:0;
-  border-radius:13px;
-  padding:13px;
-  background:var(--ink);
-  color:white;
-  cursor:pointer
-}
-
-.primary:disabled{opacity:.35}
-
-.side{
-  display:grid;
-  gap:16px
-}
-
-.side .card{padding:17px}
-.side h3{margin:0 0 12px}
-
-.progressbar{
-  height:10px;
-  background:#eee8df;
-  border-radius:20px;
-  overflow:hidden
-}
-
-.progressbar span{
-  display:block;
-  height:100%;
-  background:var(--green);
-  width:0
-}
-
-.legend{
-  display:grid;
-  gap:8px;
-  margin-top:12px;
-  font-size:14px
-}
-
-.row{
-  display:flex;
-  justify-content:space-between;
-  gap:10px
-}
-
-.list{
-  display:grid;
-  gap:8px;
-  max-height:310px;
-  overflow:auto
-}
-
-.krow{
-  display:grid;
-  grid-template-columns:40px 1fr auto;
-  align-items:center;
-  gap:9px;
-  border-bottom:1px solid #eee7dd;
-  padding:7px 0
-}
-
-.krow .glyph{font-size:27px}
-
-.pill{
-  font-size:12px;
-  border-radius:999px;
-  padding:5px 8px;
-  background:#eee
-}
-
-.new{background:#ececec}
-.learn{background:#fde6ca;color:#92500c}
-.almost{background:#dceaf8;color:#245b89}
-.master{background:#dcefe5;color:#236348}
-
-.footerCards{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-  margin-top:16px
-}
-
-.mini{padding:16px}
-.mini b{display:block;margin-bottom:4px}
-.mini span{color:var(--muted);font-size:14px}
-
-.sakura{color:#d65b6b}
-
-.note{
-  font-size:12px;
-  color:var(--muted);
-  margin-top:15px
-}
-
-@media(max-width:760px){
-  .app{padding:12px}
-  .hero{padding:18px}
-  .hero h1{font-size:28px}
-  .stats{grid-template-columns:1fr 1fr}
-  .grid{grid-template-columns:1fr}
-  .kanji{font-size:92px}
-  .footerCards{grid-template-columns:1fr}
-  .answers{grid-template-columns:1fr 1fr}
-}
+.plan-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;align-items:center}
+.plan-update{border:1px solid #bb3139;border-radius:30px;padding:14px 22px;background:#fffaf6;color:#ad2630;font:700 16px Georgia,serif;cursor:pointer}
+.plan-update-note{text-align:center;font-size:13px;color:#86675f;margin:8px auto 0;max-width:600px}
+.plan-date{font-size:12px;color:#86675f}
+[hidden]{display:none!important}
 </style>
 </head>
-
 <body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="seal jp">桜</div>
+      <div class="brand-name">KANJI<br><span>TRAINER</span></div>
+    </div>
 
-<main class="app">
+    <nav>
+      <button class="nav active" id="navInicio">⌂ <span>Inicio</span></button>
+<button class="nav" id="navPlan">▣ <span>Plan de estudio</span></button>
+      <button class="nav" id="navAprender">▣ <span>Aprender</span></button>
+      <button class="nav" id="navPracticar">✎ <span>Practicar</span></button>
+      <button class="nav" id="navRepasar">↻ <span>Repasar</span></button>
+      <button class="nav" id="navProgreso">▥ <span>Progreso</span></button>
 
-<header class="hero">
-  <div style="display:flex;align-items:center;gap:16px">
-    <div class="mark jp">学</div>
+    </nav>
 
-    <div>
-      <h1>Kanji Trainer <span class="sakura">桜</span></h1>
-      <div class="sub">
-        N5 · 一歩ずつ、もっと日本語 — paso a paso
+    <div class="divider"></div>
+    <button class="level active">◈ <span>JLPT N5</span><b>›</b></button>
+    <button class="level" disabled>▣ <span>JLPT N4</span></button>
+    <button class="level" disabled>▣ <span>JLPT N3</span></button>
+    <button class="level" disabled>▣ <span>JLPT N2</span></button>
+    <button class="level" disabled>▣ <span>JLPT N1</span></button>
+
+    <div class="sidebar-scene">
+      <div class="sun"></div><div class="mountain"></div>
+      <div class="torii">⛩</div><div class="flowers">✿ ✿</div>
+    </div>
+  </aside>
+
+  <main>
+    <header class="hero">
+      <div class="branch">✿　✿ ✿　✿　✿</div>
+      <div class="red-sun"></div>
+      <div class="fuji">富士</div>
+      <div class="pagoda">塔</div>
+      <div class="account">♧　●　 Inma⌄</div>
+      <div class="hello">
+        <h1>¡Hola, Inma!</h1>
+        <div class="jp">今日も一歩ずつ　<span>―</span></div>
       </div>
+    </header>
+
+    <section class="content" id="inicioView">
+
+      <div class="level-row">
+        <article class="card current">
+          <div class="n5">N5</div>
+          <div class="grow"><h2>JLPT N5</h2><small>Tu nivel actual</small><div class="bar"><i></i></div></div>
+          <div class="score"><small>32 / 80 kanji</small><strong>40%</strong></div>
+        </article>
+        <article class="card switch">▱　Cambiar de nivel　›</article>
+      </div>
+
+      <div class="features">
+        <article class="card feature"><div class="icon red">▣</div><h2>Aprender</h2><p>Estudia los kanji con significado, lecturas y ejemplos reales.</p><button disabled>→</button></article>
+        <article class="card feature"><div class="icon">✎</div><h2>Practicar</h2><p>Pon a prueba tus conocimientos con diferentes ejercicios.</p><button disabled>→</button></article>
+        <article class="card feature"><div class="icon">↻</div><h2>Repasar</h2><p>Revisa los kanji según tu progreso y repaso espaciado.</p><button disabled>→</button></article>
+        <article class="card feature"><div class="icon">▥</div><h2>Progreso</h2><p>Consulta tus estadísticas y el dominio de cada kanji.</p><button disabled>→</button></article><article class="card feature context-feature"><div class="icon">文</div><h2>Kanji en contexto</h2><p>Completa frases eligiendo el kanji y su lectura correcta.</p><button id="homeContextBtn">→</button></article>
+      </div>
+
+      <div class="lower">
+        <article class="card today">
+          <div class="title"><h2>⛩　Estudio de hoy　<small class="jp">今日の学習</small></h2><span><button class="plan-inline-link" id="openStudyPlan">Ver plan completo ›</button></span></div>
+          <div class="goal goal-split">
+  <div class="today-tasks">
+    <b>◎　Tu objetivo de hoy</b>
+    <label>□　<span id="todayKanjiTarget">Aprender 5 kanji nuevos</span></label>
+    <label>□　Practicar 15 preguntas</label>
+    <label>□　Repasar 10 kanji</label>
+  </div>
+  <div class="today-plan empty" id="todayPlanBox" hidden>
+    <div class="empty-icon">📅</div>
+    <strong>Planifica tu estudio</strong>
+    <p>Crea un plan según tu objetivo, el tiempo disponible y tus días de estudio.</p>
+    <button id="homeCreatePlan">Crear plan</button>
+  </div>
+</div>
+          <button class="start" id="startGuidedStudy">Comenzar estudio de hoy　→</button>
+        </article>
+        <div class="right">
+          <article class="card areas"><h2>▥　Progreso por áreas</h2><div class="rings">
+            <div><i style="--p:72%;--c:#319a70" data-p="72%"></i><small>Significado</small></div>
+            <div><i style="--p:55%;--c:#df5d5d" data-p="55%"></i><small>Lectura<br>(onyomi)</small></div>
+            <div><i style="--p:38%;--c:#e98556" data-p="38%"></i><small>Lectura<br>(kunyomi)</small></div>
+            <div><i style="--p:60%;--c:#3980b8" data-p="60%"></i><small>Vocabulario</small></div>
+          </div></article>
+          <article class="card recent"><div class="title"><h2>◷　Kanji recientes</h2><span>Ver todos ›</span></div>
+            <div class="kanjis"><div><b class="jp">水</b><small>agua　●</small></div><div><b class="jp">山</b><small>montaña　●</small></div><div><b class="jp">火</b><small>fuego　●</small></div><div><b class="jp">木</b><small>árbol　●</small></div><div><b class="jp">日</b><small>sol　●</small></div></div>
+          </article>
+        </div>
+      </div>
+
+      <div class="quote"><div class="jp">継続は力なり</div><small>La constancia es la clave del progreso.</small></div>
+    </section>
+  
+<section class="content learn-view" id="aprenderView" hidden>
+  <div class="learn-heading">
+    <div>
+      <h1>Aprender kanji <span class="jp redtext">漢字を学ぶ</span></h1>
+      <p>Significado, lecturas y vocabulario en contexto.</p>
     </div>
+    <div class="counter">Kanji <b id="learnCount">1 de 20</b></div>
   </div>
 
-  <div class="jp" style="font-size:28px">
-    継続は力なり
-  </div>
-</header>
+  <div class="learn-grid">
+    <article class="card learn-kanji">
+      <span class="learn-tag" id="learnCategory">自然 · Naturaleza</span>
+      <div class="learn-glyph jp" id="learnGlyph">水</div>
+      <div class="learn-meaning" id="learnMeaning">agua</div>
+      <div class="learn-meta">
+        <span id="learnRadical">Radical 水</span>
+        <span id="learnStrokes">4 trazos</span>
+        <span>JLPT N5</span>
+      </div>
+      <div class="memory"><b>🌸 Idea para recordarlo</b><br><span id="learnHint">Imagina corrientes de agua que se separan desde el centro.</span></div>
+    </article>
 
-
-<section class="stats">
-
-  <div class="stat">
-    <b id="mastered">0</b>
-    <small>Dominados</small>
-  </div>
-
-  <div class="stat">
-    <b id="accuracy">—</b>
-    <small>Precisión total</small>
-  </div>
-
-  <div class="stat">
-    <b id="answered">0</b>
-    <small>Respuestas</small>
-  </div>
-
-  <div class="stat">
-    <b id="streak">0</b>
-    <small>Racha actual</small>
+    <article class="card learn-info">
+      <h2>Lecturas <span class="jp">読み方</span></h2>
+      <p class="muted">Relaciona cada lectura con palabras reales.</p>
+      <div class="reading-grid">
+        <div class="reading kun"><small>KUNYOMI · lectura japonesa</small><strong class="jp" id="learnKun">みず</strong><p>Lectura japonesa.</p></div>
+        <div class="reading on"><small>ONYOMI · lectura de origen chino</small><strong class="jp" id="learnOn">スイ</strong><p>Frecuente en palabras compuestas.</p></div>
+      </div>
+      <h2 class="vtitle">Vocabulario <span class="jp">言葉</span></h2>
+      <div id="learnVocab"></div>
+    </article>
   </div>
 
+  <div class="learn-actions">
+    <button>↻ Necesito practicarlo</button>
+    <button>✓ Ya lo sé</button>
+    <button class="learn-next" id="nextKanji">Siguiente kanji　→</button>
+  </div>
 </section>
 
 
-<nav class="tabs">
-
-  <button class="active" data-mode="kanji">
-    漢字 → Lectura
-  </button>
-
-  <button data-mode="reading">
-    Lectura → 漢字
-  </button>
-
-  <button data-mode="words">
-    Palabras
-  </button>
-
-  <button data-filter="weak">
-    Repasar errores
-  </button>
-
-  <button data-filter="new">
-    Nuevos
-  </button>
-
-  <button data-filter="all">
-    Todos
-  </button>
-
-</nav>
-
-
-<div class="grid">
-
-<section class="card quiz">
-
-  <div class="topline">
-    <span id="category">Naturaleza</span>
-    <span id="status">Nuevo</span>
+<section class="content practice-view" id="practicarView" hidden>
+  <div class="learn-heading">
+    <div><h1>Practicar <span class="jp redtext">練習する</span></h1>
+    <p>Entrena significado, kanji, lecturas y vocabulario.</p></div>
+    <div class="counter">Pregunta <b id="practiceCount">1 de 15</b></div>
   </div>
 
-  <div id="prompt" class="kanji jp">
-    水
+  <div class="practice-modes">
+    <button class="pmode active" data-mode="meaning">漢 → Significado</button>
+    <button class="pmode" data-mode="kanji">Significado → 漢</button>
+    <button class="pmode" data-mode="reading">漢 → Lectura</button>
+<button class="pmode" data-mode="onyomi">漢 → Onyomi</button>
+    <button class="pmode" data-mode="readingKanji">Lectura → 漢</button>
+    <button class="pmode" data-mode="vocab">Vocabulario</button>
   </div>
 
-  <div id="question" class="question">
-    ¿Cómo se lee este kanji?
+  <div class="practice-grid">
+    <article class="card question-card">
+      <span class="learn-tag" id="practiceBadge">KANJI → SIGNIFICADO</span>
+      <p class="muted" id="practicePrompt">¿Qué significa este kanji?</p>
+      <div class="practice-main jp" id="practiceMain">水</div>
+      <div class="answers" id="practiceAnswers"></div>
+      <div class="feedback" id="practiceFeedback" hidden></div>
+      <button class="practice-next" id="practiceNext" hidden>Siguiente pregunta →</button>
+    </article>
+
+    <aside class="card session-card">
+      <h2>Tu sesión</h2>
+      <div class="session-note">Practica distintos aspectos del kanji. Los errores se guardan durante esta sesión para poder revisarlos después.</div>
+      <div class="session-stats">
+        <div><strong id="correctCount">0</strong><small>correctas</small></div>
+        <div><strong id="wrongCount">0</strong><small>errores</small></div>
+        <div><strong id="streakCount">0</strong><small>racha</small></div>
+        <div><strong id="remainingCount">15</strong><small>restantes</small></div>
+      </div>
+      <div class="session-tip"><b class="jp">一歩ずつ</b><br>Cuando falles, verás la solución antes de continuar.</div>
+    </aside>
   </div>
-
-  <div id="answers" class="answers"></div>
-
-  <div id="feedback" class="feedback">
-    Elige una respuesta. El significado aparece después para que primero pienses en japonés.
-  </div>
-
-  <div class="actions">
-    <button id="next" class="primary" disabled>
-      Siguiente →
-    </button>
-  </div>
-
 </section>
 
 
-<aside class="side">
-
-<section class="card">
-
-  <h3>Mi progreso · N5</h3>
-
-  <div class="row">
-    <span>Kanji trabajados</span>
-    <b id="worked">0 / 20</b>
+<section class="content review-view" id="repasarView" hidden>
+  <div class="learn-heading">
+    <div>
+      <h1>Repasar <span class="jp redtext">復習する</span></h1>
+      <p>Vuelve exactamente a los kanji y habilidades que te han costado.</p>
+    </div>
+    <div class="counter">Pendientes <b id="reviewPending">0</b></div>
   </div>
 
-  <div class="progressbar" style="margin-top:10px">
-    <span id="bar"></span>
+  <div id="reviewEmpty" class="card review-empty">
+    <div class="review-symbol jp">復</div>
+    <h2>De momento no tienes errores para repasar</h2>
+    <p>Practica algunas preguntas. Cuando falles, el kanji aparecerá aquí junto con la habilidad que necesitas reforzar.</p>
+    <button id="goPractice">Ir a Practicar →</button>
   </div>
 
-  <div class="legend">
-
-    <div class="row">
-      <span>Dominados</span>
-      <b id="lMaster">0</b>
+  <div id="reviewArea" hidden>
+    <div class="review-grid">
+      <article class="card question-card">
+        <span class="learn-tag" id="reviewBadge">SIGNIFICADO</span>
+        <p class="muted" id="reviewPrompt"></p>
+        <div class="practice-main jp" id="reviewMain"></div>
+        <div class="answers" id="reviewAnswers"></div>
+        <div class="feedback" id="reviewFeedback" hidden></div>
+        <button class="practice-next" id="reviewNext" hidden>Siguiente repaso →</button>
+      </article>
+      <aside class="card session-card">
+        <h2>Errores pendientes</h2>
+        <div id="reviewList" class="review-list"></div>
+        <div class="session-tip">Cuando aciertes un repaso, ese error se elimina de la lista. Si vuelves a fallarlo, permanece pendiente.</div>
+      </aside>
     </div>
-
-    <div class="row">
-      <span>Casi dominados</span>
-      <b id="lAlmost">0</b>
-    </div>
-
-    <div class="row">
-      <span>Aprendiendo</span>
-      <b id="lLearn">0</b>
-    </div>
-
-    <div class="row">
-      <span>Nuevos</span>
-      <b id="lNew">20</b>
-    </div>
-
   </div>
-
 </section>
 
 
-<section class="card">
+<section class="content progress-view" id="progresoView" hidden>
+  <div class="learn-heading">
+    <div>
+      <h1>Progreso <span class="jp redtext">進捗</span></h1>
+      <p>Consulta qué dominas y qué habilidades necesitan más práctica.</p>
+    </div>
+    <div class="counter">Nivel actual <b>N5</b></div>
+  </div>
 
-  <h3>Mis kanji</h3>
+  <div class="progress-summary">
+    <article class="card summary-main">
+      <div class="summary-circle"><span id="globalMastery">0%</span><small>dominio</small></div>
+      <div>
+        <h2>Tu progreso en N5</h2>
+        <p id="progressSummaryText">Empieza a practicar para calcular tu progreso real.</p>
+        <div class="summary-bar"><i id="globalBar"></i></div>
+        <small id="answeredTotal">0 respuestas registradas</small>
+      </div>
+    </article>
+    <article class="card skill-summary" id="skillSummary"></article>
+  </div>
 
-  <div id="kanjiList" class="list"></div>
+  <div class="progress-title">
+    <div><h2>Progreso por kanji</h2><p>El dominio se calcula por habilidad, no solo por kanji.</p></div>
+    <span>20 kanji en este primer bloque</span>
+  </div>
 
+  <div class="kanji-progress-list" id="kanjiProgressList"></div>
 </section>
 
-</aside>
 
+<div class="plan-overlay" id="planOverlay" hidden>
+  <section class="plan-modal" role="dialog" aria-modal="true" aria-labelledby="planTitle">
+    <button class="plan-close" id="closeStudyPlan" aria-label="Cerrar">×</button>
+    <div class="plan-head">
+      <span class="jp">学習計画</span>
+      <h2 id="planTitle">Plan de estudio</h2>
+      <p>Calcula un ritmo realista según tu objetivo y los días que quieres estudiar.</p>
+    </div>
+    <div class="plan-form">
+      <label>Nivel
+        <select id="planLevel"><option value="N5">JLPT N5</option></select>
+      </label>
+      <label>Kanji del objetivo
+        <input id="planTotal" type="number" min="1" max="3000" value="100">
+      </label>
+      <label>Kanji ya aprendidos
+        <input id="planLearned" type="text" value="0" readonly aria-readonly="true">
+      </label>
+      <label>Semanas disponibles
+        <input id="planWeeks" type="number" min="1" max="104" value="4">
+      </label>
+      <label>Días de estudio por semana
+        <select id="planDays">
+          <option value="2">2 días</option><option value="3">3 días</option>
+          <option value="4">4 días</option><option value="5" selected>5 días</option>
+          <option value="6">6 días</option><option value="7">7 días</option>
+        </select>
+      </label>
+    </div>
+    <div class="plan-result" id="planResult" aria-live="polite"></div>
+    <button class="plan-save" id="applyPlan">Usar este plan</button>
+  </section>
 </div>
 
 
-<section class="footerCards">
-
-  <div class="card mini">
-    <b>⛩️ Repasar mis errores</b>
-    <span>Los kanji que fallas reciben más peso en el quiz.</span>
+<section class="content plan-view" id="planView" hidden>
+  <div class="learn-heading">
+    <div><h1>Plan de estudio <span class="jp redtext">学習計画</span></h1>
+    <p>Define tu objetivo y deja que Kanji Trainer calcule tu ritmo de estudio.</p></div>
   </div>
-
-  <div class="card mini">
-    <b>🌸 Nuevos kanji</b>
-    <span>Avanza poco a poco sin perder los anteriores.</span>
-  </div>
-
-  <div class="card mini">
-    <b>🖌️ Próximamente: radicales</b>
-    <span>La estructura ya permite añadir radical, componentes y trazos.</span>
-  </div>
-
+  <article class="card plan-page-card">
+    <div class="plan-page-intro">
+      <span class="jp">計</span>
+      <div><h2>Configura tu plan</h2><p>Indica cuántos kanji quieres aprender, el tiempo disponible y cuántos días estudiarás cada semana.</p></div>
+    </div>
+    <div class="plan-form plan-page-form">
+      <label>Nivel<select id="pagePlanLevel"><option value="N5">JLPT N5</option></select></label>
+      <label>Kanji del objetivo<input id="pagePlanTotal" type="number" min="1" max="3000" value="100"></label>
+      <label>Kanji ya aprendidos<input id="pagePlanLearned" type="text" value="0" readonly aria-readonly="true"></label>
+      <label>Semanas disponibles<input id="pagePlanWeeks" type="number" min="1" max="104" value="4"></label>
+      <label>Días de estudio por semana<select id="pagePlanDays"><option value="2">2 días</option><option value="3">3 días</option><option value="4">4 días</option><option value="5" selected>5 días</option><option value="6">6 días</option><option value="7">7 días</option></select></label>
+    </div>
+    <div class="plan-result" id="pagePlanResult"></div>
+    <div class="plan-actions"><button class="plan-save" id="savePagePlan">Guardar plan de estudio</button><button class="plan-update" id="modifyPagePlan" type="button" hidden>Modificar mi plan</button><button class="plan-update" id="updatePagePlan" type="button" hidden>Actualizar el plan de estudio</button></div><p class="plan-update-note" id="planUpdateNote" hidden>Si se ha agotado el plazo, puedes reiniciar el calendario desde hoy sin borrar los kanji que ya has aprendido.</p>
+<p class="local-save-note">✓ El progreso y el plan se guardan automáticamente en este navegador.</p>
+  </article>
 </section>
 
-<div class="note">
-  Tu progreso se guarda automáticamente en este navegador. No se envía a ningún servidor.
-</div>
+
+
+<section class="content guided-view" id="guidedView" hidden>
+  <div class="learn-heading">
+    <div><h1>Estudio de hoy <span class="jp redtext">今日の学習</span></h1>
+    <p id="guidedSubtitle">Tu itinerario guiado para hoy.</p></div>
+    <div class="counter">Objetivo <b id="guidedCounter">0 kanji</b></div>
+  </div>
+  <article class="card guided-summary">
+    <div><small>NUEVOS DE HOY</small><strong id="guidedNewCount">0</strong></div>
+    <div><small>ESTUDIADOS HOY</small><strong id="guidedSeenCount">0</strong></div>
+    <div><small>DOMINADOS</small><strong id="guidedMasteredCount">0/0</strong></div>
+    <div><small>REPASOS PENDIENTES</small><strong id="guidedReviewCount">0</strong></div>
+  </article>
+  <div id="guidedKanjiList" class="guided-kanji-list"></div>
+  <article class="card guided-actions">
+    <div><h2>Ruta de hoy</h2><p>Primero estudia los kanji asignados. Después practica sus seis competencias y repasa los errores.</p></div>
+    <button id="guidedPracticeBtn">Practicar los kanji de hoy →</button>
+  </article>
+</section>
+
+
+<section class="content" id="guidedSessionView" hidden>
+  <div class="learn-heading">
+    <div>
+      <h1>Sesión guiada <span class="jp redtext">今日の練習</span></h1>
+      <p id="gsPhaseText">Trabajaremos únicamente los kanji asignados para hoy.</p>
+    </div>
+    <div class="counter"><b id="gsProgressText">Fase 1 de 5</b></div>
+  </div>
+
+  <div class="gs-steps">
+    <div data-gstep="0">1 <span>Estudiar</span></div>
+    <div data-gstep="1">2 <span>Español → 漢</span></div>
+    <div data-gstep="2">3 <span>漢 → ひらがな</span></div>
+    <div data-gstep="3">4 <span>Contexto</span></div>
+    <div data-gstep="4">5 <span>Repaso mixto</span></div>
+  </div>
+
+  <div class="practice-grid">
+    <article class="card practice-card">
+      <span class="learn-tag" id="gsTag">ESTUDIAR</span>
+      <p class="practice-prompt" id="gsPrompt">¿Conoces este kanji?</p>
+      <div class="practice-main jp" id="gsMain">水</div>
+      <div id="gsDetail" class="gs-detail"></div>
+      <div class="answers" id="gsAnswers"></div>
+      <div class="practice-feedback" id="gsFeedback"></div>
+    </article>
+
+    <aside class="card session-card">
+      <h2>Progreso de hoy</h2>
+      <div class="session-note">Aquí solo aparecen los kanji de tu plan de hoy. Un kanji cuenta como aprendido únicamente cuando completa todas sus áreas.</div>
+      <div class="gs-mini"><span>Kanji de hoy</span><b id="gsTodayCount">0</b></div>
+      <div class="gs-mini"><span>Completados</span><b id="gsCompleteCount">0</b></div>
+      <div class="gs-mini"><span>Pendientes</span><b id="gsPendingCount">0</b></div>
+      <div id="gsKanjiStatus" class="gs-status-list"></div>
+    </aside>
+  </div>
+</section>
+
+<section class="content context-view" id="contextView" hidden>
+  <div class="learn-heading">
+    <div><h1>Kanji en contexto <span class="jp redtext">文の中の漢字</span></h1>
+    <p>Completa la frase con el kanji correcto y después identifica su lectura.</p></div>
+    <div class="counter">Pregunta <b id="contextCount">1 de 20</b></div>
+  </div>
+  <div class="practice-grid">
+    <article class="card context-card">
+      <span class="learn-tag">KANJI EN CONTEXTO</span>
+      <p class="context-instruction">1. Elige el kanji que completa la frase.</p>
+      <div class="context-sentence jp" id="contextSentence"></div>
+      <div class="context-options" id="contextKanjiOptions"></div>
+      <div id="contextReadingArea" hidden>
+        <p class="context-instruction">2. Ahora elige la lectura correcta.</p>
+        <div class="context-options reading-options" id="contextReadingOptions"></div>
+      </div>
+      <div class="feedback" id="contextFeedback" hidden></div>
+      <button class="practice-next" id="contextNext" hidden>Siguiente frase →</button>
+    </article>
+    <aside class="card session-card">
+      <h2>Contexto real</h2>
+      <div class="session-note">Aquí no basta con saber el significado. Debes reconocer qué kanji necesita la frase y cómo se lee en ese contexto.</div>
+      <div class="session-stats">
+        <div><strong id="contextCorrect">0</strong><small>correctas</small></div>
+        <div><strong id="contextWrong">0</strong><small>errores</small></div>
+      </div>
+      <div class="session-tip"><b>Ejemplo</b><br><span class="jp">水曜日（すいようび）</span> usa la lectura <span class="jp">スイ</span>, mientras <span class="jp">水（みず）</span> usa kunyomi.</div>
+    </aside>
+  </div>
+</section>
 
 </main>
-
-
+</div>
 <script>
-
-const DATA=[
-
-{k:'水',kun:'みず',on:'すい',m:'agua',c:'Naturaleza',
-words:[['水','みず'],['水曜日','すいようび']]},
-
-{k:'山',kun:'やま',on:'さん',m:'montaña',c:'Naturaleza',
-words:[['山','やま'],['富士山','ふじさん']]},
-
-{k:'川',kun:'かわ',on:'せん',m:'río',c:'Naturaleza',
-words:[['川','かわ']]},
-
-{k:'木',kun:'き',on:'もく',m:'árbol',c:'Naturaleza',
-words:[['木','き'],['木曜日','もくようび']]},
-
-{k:'火',kun:'ひ',on:'か',m:'fuego',c:'Naturaleza',
-words:[['火','ひ'],['火曜日','かようび']]},
-
-{k:'月',kun:'つき',on:'げつ',m:'luna / mes',c:'Tiempo',
-words:[['月','つき'],['月曜日','げつようび']]},
-
-{k:'日',kun:'ひ',on:'にち',m:'día / sol',c:'Tiempo',
-words:[['日','ひ'],['日本','にほん']]},
-
-{k:'人',kun:'ひと',on:'じん',m:'persona',c:'Personas',
-words:[['人','ひと'],['日本人','にほんじん']]},
-
-{k:'本',kun:'もと',on:'ほん',m:'libro / origen',c:'Objetos',
-words:[['本','ほん'],['日本','にほん']]},
-
-{k:'学',kun:'まなぶ',on:'がく',m:'estudio',c:'Estudio',
-words:[['学生','がくせい'],['学校','がっこう']]},
-
-{k:'先',kun:'さき',on:'せん',m:'antes / delante',c:'Personas',
-words:[['先生','せんせい']]},
-
-{k:'生',kun:'いきる',on:'せい',m:'vida / nacer',c:'Personas',
-words:[['学生','がくせい'],['先生','せんせい']]},
-
-{k:'大',kun:'おおきい',on:'だい',m:'grande',c:'Adjetivos',
-words:[['大学','だいがく']]},
-
-{k:'小',kun:'ちいさい',on:'しょう',m:'pequeño',c:'Adjetivos',
-words:[['小さい','ちいさい']]},
-
-{k:'中',kun:'なか',on:'ちゅう',m:'dentro / medio',c:'Posición',
-words:[['中','なか']]},
-
-{k:'上',kun:'うえ',on:'じょう',m:'arriba',c:'Posición',
-words:[['上','うえ']]},
-
-{k:'下',kun:'した',on:'か',m:'abajo',c:'Posición',
-words:[['下','した']]},
-
-{k:'左',kun:'ひだり',on:'さ',m:'izquierda',c:'Posición',
-words:[['左','ひだり']]},
-
-{k:'右',kun:'みぎ',on:'う',m:'derecha',c:'Posición',
-words:[['右','みぎ']]},
-
-{k:'時',kun:'とき',on:'じ',m:'hora / tiempo',c:'Tiempo',
-words:[['一時','いちじ']]}
-
+const KANJI = [
+ {c:"水",m:"agua",kun:"みず",on:"スイ",rad:"水",st:4,cat:"自然 · Naturaleza",hint:"Imagina corrientes de agua que se separan desde el centro.",v:[["水","みず","agua"],["水曜日","すいようび","miércoles"]]},
+ {c:"山",m:"montaña",kun:"やま",on:"サン",rad:"山",st:3,cat:"自然 · Naturaleza",hint:"Sus tres picos recuerdan la silueta de una montaña.",v:[["山","やま","montaña"],["富士山","ふじさん","monte Fuji"]]},
+ {c:"川",m:"río",kun:"かわ",on:"セン",rad:"川",st:3,cat:"自然 · Naturaleza",hint:"Tres líneas que fluyen como las corrientes de un río.",v:[["川","かわ","río"],["小川","おがわ","arroyo"]]},
+ {c:"人",m:"persona",kun:"ひと",on:"ジン・ニン",rad:"人",st:2,cat:"人 · Personas",hint:"Parece una persona caminando sobre dos piernas.",v:[["人","ひと","persona"],["日本人","にほんじん","persona japonesa"]]},
+ {c:"日",m:"día / sol",kun:"ひ・か",on:"ニチ・ジツ",rad:"日",st:4,cat:"時間 · Tiempo",hint:"Representa el disco del sol y, por extensión, el día.",v:[["日","ひ","día / sol"],["日本","にほん","Japón"]]},
+ {c:"月",m:"luna / mes",kun:"つき",on:"ゲツ・ガツ",rad:"月",st:4,cat:"時間 · Tiempo",hint:"La forma recuerda una luna creciente estilizada.",v:[["月","つき","luna"],["月曜日","げつようび","lunes"]]},
+ {c:"火",m:"fuego",kun:"ひ",on:"カ",rad:"火",st:4,cat:"自然 · Naturaleza",hint:"Las líneas laterales parecen llamas que saltan.",v:[["火","ひ","fuego"],["火曜日","かようび","martes"]]},
+ {c:"木",m:"árbol",kun:"き",on:"モク・ボク",rad:"木",st:4,cat:"自然 · Naturaleza",hint:"Tronco, ramas y raíces forman la imagen de un árbol.",v:[["木","き","árbol"],["木曜日","もくようび","jueves"]]},
+ {c:"金",m:"oro / dinero",kun:"かね",on:"キン",rad:"金",st:8,cat:"生活 · Vida diaria",hint:"Piensa en algo valioso y brillante: metal, oro y dinero.",v:[["お金","おかね","dinero"],["金曜日","きんようび","viernes"]]},
+ {c:"土",m:"tierra / suelo",kun:"つち",on:"ド・ト",rad:"土",st:3,cat:"自然 · Naturaleza",hint:"Una planta que sale de una línea de tierra.",v:[["土","つち","tierra"],["土曜日","どようび","sábado"]]},
+ {c:"本",m:"libro / origen",kun:"もと",on:"ホン",rad:"木",st:5,cat:"生活 · Vida diaria",hint:"Es 木 con una marca en la raíz: el origen; también significa libro.",v:[["本","ほん","libro"],["日本","にほん","Japón"]]},
+ {c:"大",m:"grande",kun:"おお",on:"ダイ・タイ",rad:"大",st:3,cat:"形容 · Descripción",hint:"Una persona abre brazos y piernas para parecer muy grande.",v:[["大きい","おおきい","grande"],["大学","だいがく","universidad"]]},
+ {c:"小",m:"pequeño",kun:"ちい・こ",on:"ショウ",rad:"小",st:3,cat:"形容 · Descripción",hint:"Tres trazos pequeños reunidos.",v:[["小さい","ちいさい","pequeño"],["小学校","しょうがっこう","escuela primaria"]]},
+ {c:"上",m:"arriba / encima",kun:"うえ・あ",on:"ジョウ",rad:"一",st:3,cat:"位置 · Posición",hint:"La marca está por encima de la línea de referencia.",v:[["上","うえ","encima"],["上手","じょうず","hábil"]]},
+ {c:"下",m:"abajo / debajo",kun:"した・さ",on:"カ・ゲ",rad:"一",st:3,cat:"位置 · Posición",hint:"La marca cae por debajo de la línea de referencia.",v:[["下","した","debajo"],["地下","ちか","subterráneo"]]},
+ {c:"中",m:"dentro / centro",kun:"なか",on:"チュウ",rad:"丨",st:4,cat:"位置 · Posición",hint:"Una línea atraviesa exactamente el centro de una caja.",v:[["中","なか","dentro"],["中国","ちゅうごく","China"]]},
+ {c:"学",m:"estudiar / aprendizaje",kun:"まな",on:"ガク",rad:"子",st:8,cat:"学習 · Estudio",hint:"Asócialo con una escuela y un niño aprendiendo.",v:[["学生","がくせい","estudiante"],["大学","だいがく","universidad"]]},
+ {c:"生",m:"vida / nacer",kun:"い・う・なま",on:"セイ・ショウ",rad:"生",st:5,cat:"人 · Vida",hint:"Una planta nace y crece desde la tierra.",v:[["学生","がくせい","estudiante"],["先生","せんせい","profesor/a"]]},
+ {c:"先",m:"antes / anterior",kun:"さき",on:"セン",rad:"儿",st:6,cat:"時間 · Orden",hint:"Algo que va delante o sucede antes.",v:[["先","さき","antes / delante"],["先生","せんせい","profesor/a"]]},
+ {c:"年",m:"año",kun:"とし",on:"ネン",rad:"干",st:6,cat:"時間 · Tiempo",hint:"Úsalo como la unidad con la que contamos los años.",v:[["年","とし","año"],["一年","いちねん","un año"]]}
 ];
+let current=0;
+const inicio=document.getElementById("inicioView"), aprender=document.getElementById("aprenderView");
+const navInicio=document.getElementById("navInicio"), navAprender=document.getElementById("navAprender");
+const practicar=document.getElementById("practicarView"), navPracticar=document.getElementById("navPracticar");
+const repasar=document.getElementById("repasarView"), navRepasar=document.getElementById("navRepasar");
+const progreso=document.getElementById("progresoView"), navProgreso=document.getElementById("navProgreso");
+const planView=document.getElementById("planView"), navPlan=document.getElementById("navPlan");
+const contextView=document.getElementById("contextView");
+const guidedView=document.getElementById("guidedView");
+const guidedSessionView=document.getElementById("guidedSessionView");
+function show(view){
+ inicio.hidden=view!=="inicio"; aprender.hidden=view!=="aprender"; practicar.hidden=view!=="practicar"; repasar.hidden=view!=="repasar"; progreso.hidden=view!=="progreso"; planView.hidden=view!=="plan"; contextView.hidden=view!=="context"; guidedView.hidden=view!=="guided"; guidedSessionView.hidden=view!=="guidedSession";
+ navInicio.classList.toggle("active",view==="inicio");
+ navAprender.classList.toggle("active",view==="aprender");
+ navPracticar.classList.toggle("active",view==="practicar");
+ navRepasar.classList.toggle("active",view==="repasar");
+ navProgreso.classList.toggle("active",view==="progreso");
+ navPlan.classList.toggle("active",view==="plan");
+ if(view==="repasar") renderReview();
+ if(view==="progreso") renderProgress();
+ if(view==="guided") renderGuidedStudy();
+ window.scrollTo(0,0);
+}
+navInicio.onclick=()=>show("inicio"); navAprender.onclick=()=>show("aprender"); navPracticar.onclick=()=>show("practicar"); navRepasar.onclick=()=>show("repasar"); navProgreso.onclick=()=>show("progreso"); navPlan.onclick=()=>show("plan");
+function render(){
+ const k=KANJI[current];
+ learnCount.textContent=(current+1)+" de "+KANJI.length;
+ learnGlyph.textContent=k.c; learnMeaning.textContent=k.m; learnKun.textContent=k.kun; learnOn.textContent=k.on;
+ learnRadical.textContent="Radical "+k.rad; learnStrokes.textContent=k.st+" trazos"; learnCategory.textContent=k.cat; learnHint.textContent=k.hint;
+ learnVocab.innerHTML=k.v.map(x=>`<div class="vrow"><span class="jp">${x[0]}</span><span class="jp">${x[1]}</span><span>${x[2]}</span></div>`).join("");
+}
+document.getElementById("nextKanji").onclick=()=>{current=(current+1)%KANJI.length;render()};
+render();
+
+let pMode="meaning", pIndex=0, correct=0, wrong=0, streak=0, answered=false;
+let reviewQueue=[];
+const progressData={};
+KANJI.forEach(k=>progressData[k.c]={
+ jpToEs:{ok:0,bad:0},
+ esToJp:{ok:0,bad:0},
+ onyomi:{ok:0,bad:0},
+ kunyomi:{ok:0,bad:0},
+ vocabulary:{ok:0,bad:0},
+ context:{ok:0,bad:0}
+});
+function skillForMode(mode){
+ if(mode==="meaning") return "jpToEs";
+ if(mode==="kanji") return "esToJp";
+ if(mode==="reading") return "kunyomi";
+ if(mode==="onyomi") return "onyomi";
+ if(mode==="readingKanji") return "kunyomi";
+ if(mode==="context") return "context";
+ return "vocabulary";
+}
+function recordProgress(k,mode,ok){
+ const sk=skillForMode(mode), d=progressData[k.c][sk];
+ if(ok)d.ok++; else d.bad++;
+ syncLearnedCounters();
+ saveLocalState();
+}
+function syncLearnedCounters(){
+ const n=learnedKanjiCount();
+ const a=document.getElementById("pagePlanLearned");
+ const b=document.getElementById("planLearned");
+ if(a)a.value=n;
+ if(b)b.value=n;
+}
+const totalQuestions=15;
+const labels={meaning:"KANJI → SIGNIFICADO",kanji:"SIGNIFICADO → KANJI",reading:"KANJI → KUNYOMI",onyomi:"KANJI → ONYOMI",readingKanji:"LECTURA → KANJI",vocab:"VOCABULARIO"};
+function shuffled(a){return [...a].sort(()=>Math.random()-.5)}
+function options(correctValue,pool){
+ const vals=[...new Set(pool.filter(x=>x!==correctValue))];
+ return shuffled([correctValue,...shuffled(vals).slice(0,3)]);
+}
+function makeQuestion(){
+ answered=false; practiceFeedback.hidden=true; practiceNext.hidden=true;
+ const k=KANJI[pIndex%KANJI.length]; let main,prompt,correctValue,pool;
+ if(pMode==="meaning"){main=k.c;prompt="¿Qué significa este kanji?";correctValue=k.m;pool=KANJI.map(x=>x.m);practiceMain.className="practice-main jp";}
+ if(pMode==="kanji"){main=k.m;prompt="¿Qué kanji corresponde a este significado?";correctValue=k.c;pool=KANJI.map(x=>x.c);practiceMain.className="practice-main text";}
+ if(pMode==="reading"){main=k.c;prompt="¿Cuál es una lectura correcta?";correctValue=k.kun;pool=KANJI.map(x=>x.kun);practiceMain.className="practice-main jp";}
+ if(pMode==="onyomi"){main=k.c;prompt="¿Cuál es una lectura onyomi correcta?";correctValue=k.on;pool=KANJI.map(x=>x.on);practiceMain.className="practice-main jp";}
+ if(pMode==="readingKanji"){main=k.kun;prompt="¿A qué kanji corresponde esta lectura?";correctValue=k.c;pool=KANJI.map(x=>x.c);practiceMain.className="practice-main jp";}
+ if(pMode==="vocab"){const v=k.v[0];main=v[0];prompt="¿Qué significa esta palabra?";correctValue=v[2];pool=KANJI.map(x=>x.v[0][2]);practiceMain.className="practice-main jp";}
+ practiceBadge.textContent=labels[pMode];practicePrompt.textContent=prompt;practiceMain.textContent=main;
+ practiceAnswers.innerHTML=options(correctValue,pool).map(v=>`<button class="panswer" data-value="${v.replaceAll('"','&quot;')}">${v}</button>`).join("");
+ practiceAnswers.querySelectorAll("button").forEach(b=>b.onclick=()=>checkAnswer(b,correctValue,k));
+ practiceCount.textContent=(Math.min(correct+wrong+1,totalQuestions))+" de "+totalQuestions;
+ remainingCount.textContent=Math.max(totalQuestions-(correct+wrong),0);
+}
+function checkAnswer(btn,correctValue,k){
+ if(answered)return; answered=true;
+ const ok=btn.dataset.value===correctValue;
+ practiceAnswers.querySelectorAll("button").forEach(b=>{b.disabled=true;if(b.dataset.value===correctValue)b.classList.add("good")});
+ if(!ok)btn.classList.add("bad");
+ recordProgress(k,pMode,ok);
+ if(ok){correct++;streak++;practiceFeedback.innerHTML=`<b>✓ Correcto.</b> ${k.c} · ${k.m} · ${k.kun} / ${k.on}`;}
+ else{
+ wrong++;streak=0;
+ const key=k.c+"|"+pMode;
+ if(!reviewQueue.some(x=>x.key===key)) reviewQueue.push({key,kanji:k,mode:pMode});
+ saveLocalState();
+ practiceFeedback.innerHTML=`<b>✕ Esta vez no.</b> La respuesta correcta es <b>${correctValue}</b>.<br>${k.c} · ${k.m} · ${k.kun} / ${k.on}`;
+}
+ correctCount.textContent=correct;wrongCount.textContent=wrong;streakCount.textContent=streak;remainingCount.textContent=Math.max(totalQuestions-(correct+wrong),0);
+ practiceFeedback.hidden=false;practiceNext.hidden=false;
+}
+practiceNext.onclick=()=>{pIndex=(pIndex+1)%KANJI.length;makeQuestion()};
+document.querySelectorAll(".pmode").forEach(b=>b.onclick=()=>{document.querySelectorAll(".pmode").forEach(x=>x.classList.remove("active"));b.classList.add("active");pMode=b.dataset.mode;makeQuestion()});
+makeQuestion();
 
 
-const KEY='kanjiTrainerProgressV1';
+const modeNames={meaning:"Significado",kanji:"Kanji",reading:"Kunyomi",onyomi:"Onyomi",readingKanji:"Lectura → Kanji",vocab:"Vocabulario"};
+let reviewCurrent=null, reviewAnswered=false;
+function reviewQuestionData(item){
+ const k=item.kanji,m=item.mode; let main,prompt,correctValue,pool,cls="practice-main jp";
+ if(m==="meaning"){main=k.c;prompt="¿Qué significa este kanji?";correctValue=k.m;pool=KANJI.map(x=>x.m);}
+ if(m==="kanji"){main=k.m;prompt="¿Qué kanji corresponde a este significado?";correctValue=k.c;pool=KANJI.map(x=>x.c);cls="practice-main text";}
+ if(m==="reading"){main=k.c;prompt="¿Cuál es una lectura japonesa correcta?";correctValue=k.kun;pool=KANJI.map(x=>x.kun);}
+ if(m==="onyomi"){main=k.c;prompt="¿Cuál es una lectura onyomi correcta?";correctValue=k.on;pool=KANJI.map(x=>x.on);}
+ if(m==="readingKanji"){main=k.kun;prompt="¿A qué kanji corresponde esta lectura?";correctValue=k.c;pool=KANJI.map(x=>x.c);}
+ if(m==="vocab"){const v=k.v[0];main=v[0];prompt="¿Qué significa esta palabra?";correctValue=v[2];pool=KANJI.map(x=>x.v[0][2]);}
+ return {main,prompt,correctValue,pool,cls};
+}
+function renderReview(){
+ reviewPending.textContent=reviewQueue.length;
+ reviewEmpty.hidden=reviewQueue.length>0; reviewArea.hidden=reviewQueue.length===0;
+ if(!reviewQueue.length)return;
+ reviewList.innerHTML=reviewQueue.map(x=>`<div class="review-item"><span class="jp">${x.kanji.c}</span><div><b>${x.kanji.m}</b><small>${x.kanji.kun} · ${x.kanji.on}</small></div><span>${modeNames[x.mode]}</span></div>`).join("");
+ reviewCurrent=reviewQueue[0]; reviewAnswered=false;
+ const q=reviewQuestionData(reviewCurrent);
+ reviewBadge.textContent="REPASO · "+modeNames[reviewCurrent.mode].toUpperCase();
+ reviewPrompt.textContent=q.prompt;reviewMain.textContent=q.main;reviewMain.className=q.cls;
+ reviewFeedback.hidden=true;reviewNext.hidden=true;
+ reviewAnswers.innerHTML=options(q.correctValue,q.pool).map(v=>`<button class="panswer" data-value="${v.replaceAll('"','&quot;')}">${v}</button>`).join("");
+ reviewAnswers.querySelectorAll("button").forEach(b=>b.onclick=()=>checkReview(b,q.correctValue));
+}
+function checkReview(btn,correctValue){
+ if(reviewAnswered)return;reviewAnswered=true;
+ const ok=btn.dataset.value===correctValue;
+ recordProgress(reviewCurrent.kanji,reviewCurrent.mode,ok);
+ reviewAnswers.querySelectorAll("button").forEach(b=>{b.disabled=true;if(b.dataset.value===correctValue)b.classList.add("good")});
+ if(!ok)btn.classList.add("bad");
+ if(ok){
+   reviewFeedback.innerHTML="<b>✓ Correcto.</b> Este error queda resuelto.";
+   reviewQueue=reviewQueue.filter(x=>x.key!==reviewCurrent.key);
+   saveLocalState();
+ }else{
+   reviewFeedback.innerHTML=`<b>✕ Aún necesita repaso.</b> La respuesta correcta es <b>${correctValue}</b>.`;
+ }
+ reviewFeedback.hidden=false;reviewNext.hidden=false;reviewPending.textContent=reviewQueue.length;
+}
+reviewNext.onclick=()=>renderReview();
+goPractice.onclick=()=>show("practicar");
 
-let saved;
 
-try{
-  saved=JSON.parse(localStorage.getItem(KEY)||'{}')
-}catch{
-  saved={}
+function pct(d){
+ const n=d.ok+d.bad;
+ return n ? Math.round(d.ok/n*100) : 0;
+}
+function kanjiMastery(k){
+ const d=progressData[k.c];
+ const skills=["jpToEs","esToJp","kunyomi","onyomi","vocabulary","context"];
+ return Math.round(skills.reduce((sum,sk)=>sum+pct(d[sk]),0)/skills.length);
+}
+function kanjiLearned(k){
+ const d=progressData[k.c];
+ return ["jpToEs","esToJp","kunyomi","onyomi","vocabulary","context"].every(sk=>pct(d[sk])>=80);
+}
+function learnedKanjiCount(){
+ return KANJI.filter(k => (typeof guidedKanjiComplete==="function" ? guidedKanjiComplete(k) : kanjiLearned(k))).length;
+}
+function renderProgress(){
+ const skills=["jpToEs","esToJp","kunyomi","onyomi","vocabulary","context"];
+ const names={jpToEs:"JP → ES",esToJp:"ES → JP",kunyomi:"Kunyomi",onyomi:"Onyomi",vocabulary:"Vocabulario",context:"Contexto"};
+ let totals={meaning:{ok:0,bad:0},onyomi:{ok:0,bad:0},kunyomi:{ok:0,bad:0},vocabulary:{ok:0,bad:0}, context:{ok:0,bad:0}};
+ let answers=0;
+ KANJI.forEach(k=>skills.forEach(sk=>{
+   totals[sk].ok+=progressData[k.c][sk].ok;
+   totals[sk].bad+=progressData[k.c][sk].bad;
+   answers+=progressData[k.c][sk].ok+progressData[k.c][sk].bad;
+ }));
+ const skillPcts=skills.map(sk=>pct(totals[sk]));
+ const global=Math.round(skillPcts.reduce((a,b)=>a+b,0)/skills.length);
+ globalMastery.textContent=global+"%";
+ globalBar.style.width=global+"%";
+ document.querySelector(".summary-circle").style.background=`conic-gradient(var(--red) ${global*3.6}deg,#eadfd5 0deg)`;
+ answeredTotal.textContent=answers+" respuestas registradas";
+ progressSummaryText.textContent=answers ? "Este porcentaje se basa en tus respuestas de Practicar y Repasar." : "Empieza a practicar para calcular tu progreso real.";
+ skillSummary.innerHTML=skills.map((sk,i)=>`<div class="skill-box"><div><span>${names[sk]}</span><b>${skillPcts[i]}%</b></div><div class="mini-bar"><i style="width:${skillPcts[i]}%"></i></div></div>`).join("");
+ kanjiProgressList.innerHTML=KANJI.map(k=>{
+   const d=progressData[k.c], mastery=kanjiMastery(k), learned=kanjiLearned(k);
+   const status=learned?"Aprendido":mastery>=65?"Casi dominado":mastery>0?"Aprendiendo":"Nuevo";
+   return `<article class="kp-card">
+     <div class="kp-kanji"><span class="jp">${k.c}</span><b>${k.m}</b></div>
+     <div>
+       <div class="kp-head"><strong>${k.kun} · ${k.on}</strong><span class="mastery-pill">${learned?"✓ ":""}${status} · ${mastery}%</span></div>
+       ${skills.map(sk=>{const v=pct(d[sk]);return `<div class="skill-line"><span>${names[sk]}</span><div class="mini-bar"><i style="width:${v}%"></i></div><em>${v}%</em></div>`}).join("")}
+     </div>
+   </article>`;
+ }).join("");
 }
 
 
-const state={
-  mode:'kanji',
-  filter:'all',
-  cur:null,
-  answer:'',
-  locked:false,
-  streak:saved.streak||0,
-  stats:saved.stats||{
-    correct:0,
-    total:0
-  },
-  p:saved.p||{}
+const planOverlay=document.getElementById("planOverlay");
+function calculatePlan(){
+ const total=Math.max(1,Number(planTotal.value)||100);
+ const learned=Math.min(total,learnedKanjiCount());
+ planLearned.value=learned;
+ const weeks=Math.max(1,Number(planWeeks.value)||1);
+ const days=Math.max(1,Number(planDays.value)||1);
+ const remaining=total-learned, studyDays=weeks*days;
+ const perDay=remaining ? Math.ceil(remaining/studyDays) : 0;
+ const perWeek=remaining ? Math.ceil(remaining/weeks) : 0;
+ planResult.innerHTML=remaining===0
+ ? `<div class="plan-big">🎉 Objetivo completado</div><div class="plan-note">Ya has alcanzado los ${total} kanji indicados.</div>`
+ : `<div>Para completar <b>${remaining} kanji pendientes</b> en ${weeks} semanas:</div>
+    <div class="plan-big">${perDay} kanji nuevos / día</div>
+    <div class="plan-metrics">
+      <div><b>${perWeek}</b><small>kanji por semana</small></div>
+      <div><b>${studyDays}</b><small>días de estudio</small></div>
+      <div><b>${remaining}</b><small>kanji pendientes</small></div>
+    </div>
+    <div class="plan-note">El cálculo redondea hacia arriba para que puedas alcanzar el objetivo y deja el repaso como parte de cada sesión.</div>`;
+ return {total,learned,weeks,days,remaining,perDay,perWeek};
+}
+openStudyPlan.onclick=()=>show("plan");
+homeCreatePlan.onclick=()=>show("plan");
+closeStudyPlan.onclick=()=>planOverlay.hidden=true;
+planOverlay.addEventListener("click",e=>{if(e.target===planOverlay)planOverlay.hidden=true});
+["planTotal","planLearned","planWeeks","planDays"].forEach(id=>document.getElementById(id).addEventListener("input",calculatePlan));
+applyPlan.onclick=()=>{
+ const p=calculatePlan();
+ todayKanjiTarget.textContent=`Aprender ${p.perDay} kanji nuevos`;
+ document.getElementById("startGuidedStudy").textContent="Comenzar estudio de hoy　→";
+ todayPlanLevel.textContent="JLPT "+planLevel.value;
+ todayPlanWeeks.textContent=p.weeks;
+ todayPlanDays.textContent=p.days;
+ todayPlanPerDay.textContent=p.perDay;
+ todayPlanRemaining.textContent=p.remaining+" kanji pendientes";
+ applyPlan.textContent="✓ Plan aplicado";
+ setTimeout(()=>{applyPlan.textContent="Usar este plan";planOverlay.hidden=true},700);
 };
 
 
-DATA.forEach(x=>{
-  state.p[x.k]??={
-    ok:0,
-    bad:0
-  }
-});
+let activeStudyPlan=null;
+function calcPagePlan(){
+ const total=Math.max(1,Number(pagePlanTotal.value)||100);
+ const learned=Math.min(total,learnedKanjiCount());
+ pagePlanLearned.value=learned;
+ const weeks=Math.max(1,Number(pagePlanWeeks.value)||1);
+ const days=Math.max(1,Number(pagePlanDays.value)||1);
+ const remaining=total-learned, studyDays=weeks*days;
+ const perDay=remaining?Math.ceil(remaining/studyDays):0;
+ const perWeek=remaining?Math.ceil(remaining/weeks):0;
+ pagePlanResult.innerHTML=remaining===0
+ ? `<div class="plan-big">🎉 Objetivo completado</div>`
+ : `<div>Para completar <b>${remaining} kanji pendientes</b> en ${weeks} semanas:</div><div class="plan-big">${perDay} kanji nuevos / día</div><div class="plan-metrics"><div><b>${perWeek}</b><small>kanji por semana</small></div><div><b>${studyDays}</b><small>días de estudio</small></div><div><b>${remaining}</b><small>kanji pendientes</small></div></div>`;
+ return {level:pagePlanLevel.value,total,learned,weeks,days,remaining,perDay,perWeek};
+}
+["pagePlanTotal","pagePlanLearned","pagePlanWeeks","pagePlanDays"].forEach(id=>document.getElementById(id).addEventListener("input",calcPagePlan));
+function renderHomePlan(){
+ if(!activeStudyPlan){
+   todayPlanBox.hidden=true;
+   todayPlanBox.innerHTML="";
+   todayKanjiTarget.textContent="Aprender kanji nuevos";
+   document.getElementById("startGuidedStudy").hidden=true;
+   return;
+ }
+ todayPlanBox.hidden=false;
+ document.getElementById("startGuidedStudy").hidden=false;
+ document.getElementById("startGuidedStudy").textContent="Continuar estudio de hoy　→";
+ const p=activeStudyPlan;
+ todayPlanBox.className="today-plan";
+ todayPlanBox.innerHTML=`<div class="today-plan-top"><span>📅 Tu plan</span><button id="editPlanDynamic">Editar</button></div><strong>JLPT ${p.level}</strong><div class="today-plan-grid"><div><b>${p.weeks}</b><small>semanas</small></div><div><b>${p.days}</b><small>días / semana</small></div><div><b>${p.perDay}</b><small>kanji / día</small></div></div><p>${Math.max(0,p.total-learnedKanjiCount())} kanji pendientes</p><p class="plan-date">Plan iniciado: ${p.startDate||"sin fecha registrada"}</p>`;
+ document.getElementById("editPlanDynamic").onclick=()=>show("plan");
+ todayKanjiTarget.textContent=`Aprender ${p.perDay} kanji nuevos`;
+}
+savePagePlan.onclick=()=>{
+ const oldGuided=activeStudyPlan && activeStudyPlan.guidedDays ? activeStudyPlan.guidedDays : {};
+ activeStudyPlan=calcPagePlan();
+ activeStudyPlan.guidedDays=oldGuided;
+ activeStudyPlan.startDate=activeStudyPlan.startDate || todayKey();
+ renderHomePlan();
+ saveLocalState();
+ savePagePlan.textContent="✓ Cambios guardados";
+ editingExistingPlan=false;
+ syncPlanUpdateButton();
+ setTimeout(()=>{show("inicio")},650);
+};
+const updatePagePlan=document.getElementById("updatePagePlan");
+const planUpdateNote=document.getElementById("planUpdateNote");
+const modifyPagePlan=document.getElementById("modifyPagePlan");
+let editingExistingPlan=false;
+function syncPlanUpdateButton(){
+ const exists=!!activeStudyPlan;
+ updatePagePlan.hidden=!exists;
+ modifyPagePlan.hidden=!exists;
+ planUpdateNote.hidden=!exists;
+ savePagePlan.hidden=exists&&!editingExistingPlan;
+ if(exists&&!editingExistingPlan){
+   pagePlanTotal.value=activeStudyPlan.total;
+   pagePlanWeeks.value=activeStudyPlan.weeks;
+   pagePlanDays.value=activeStudyPlan.days;
+   pagePlanLevel.value=activeStudyPlan.level;
+   calcPagePlan();
+ }
+ savePagePlan.textContent=editingExistingPlan?"Guardar cambios":"Guardar plan de estudio";
+}
+modifyPagePlan.onclick=()=>{
+ editingExistingPlan=true;
+ savePagePlan.hidden=false;
+ savePagePlan.textContent="Guardar cambios";
+ modifyPagePlan.hidden=true;
+ pagePlanTotal.focus();
+};
+updatePagePlan.onclick=()=>{
+ if(!activeStudyPlan)return;
+ if(!confirm("¿Actualizar el calendario del plan desde hoy? Se conservarán tus kanji dominados, pero se reiniciarán las sesiones diarias anteriores."))return;
+ const fresh=calcPagePlan();
+ activeStudyPlan={...fresh,startDate:todayKey(),guidedDays:{}};
+ editingExistingPlan=false;
+ saveLocalState();renderHomePlan();syncPlanUpdateButton();show("inicio");
+};
+calcPagePlan();
+renderHomePlan();
+syncPlanUpdateButton();
+document.querySelectorAll('[data-page="plan"]').forEach(b=>b.addEventListener("click",syncPlanUpdateButton));
+
+console.log("Kanji Trainer limpio · Paso 6B · Plan lateral integrado");
 
 
-const $=s=>document.querySelector(s);
 
-const shuffle=a=>
-  [...a].sort(()=>Math.random()-.5);
+const CONTEXT_QUESTIONS=[
+ {k:"水",sentence:"わたしは ___ を のみます。",reading:"みず",meaning:"Yo bebo agua."},
+ {k:"山",sentence:"あした ___ に のぼります。",reading:"やま",meaning:"Mañana subiré a la montaña."},
+ {k:"川",sentence:"___ の みずは きれいです。",reading:"かわ",meaning:"El agua del río está limpia."},
+ {k:"人",sentence:"あそこに ___ が います。",reading:"ひと",meaning:"Allí hay una persona."},
+ {k:"日",sentence:"___ が のぼります。",reading:"ひ",meaning:"Sale el sol."},
+ {k:"月",sentence:"___ が きれいです。",reading:"つき",meaning:"La luna es bonita."},
+ {k:"火",sentence:"___ を けしてください。",reading:"ひ",meaning:"Apaga el fuego, por favor."},
+ {k:"木",sentence:"おおきい ___ です。",reading:"き",meaning:"Es un árbol grande."},
+ {k:"金",sentence:"___曜日に はたらきます。",reading:"きん",meaning:"Trabajo el viernes."},
+ {k:"土",sentence:"___曜日は やすみです。",reading:"ど",meaning:"El sábado es día de descanso."},
+ {k:"本",sentence:"この ___ を よみます。",reading:"ほん",meaning:"Leo este libro."},
+ {k:"大",sentence:"この いぬは ___きいです。",reading:"おお",meaning:"Este perro es grande."},
+ {k:"小",sentence:"この ねこは ___さいです。",reading:"ちい",meaning:"Este gato es pequeño."},
+ {k:"上",sentence:"つくえの ___ に ほんが あります。",reading:"うえ",meaning:"Hay un libro encima de la mesa."},
+ {k:"下",sentence:"いすの ___ に ねこが います。",reading:"した",meaning:"Hay un gato debajo de la silla."},
+ {k:"中",sentence:"かばんの ___ に ほんが あります。",reading:"なか",meaning:"Hay un libro dentro del bolso."},
+ {k:"学",sentence:"わたしは ___生です。",reading:"がく",meaning:"Soy estudiante."},
+ {k:"生",sentence:"わたしは 学___です。",reading:"せい",meaning:"Soy estudiante."},
+ {k:"先",sentence:"田中さんは ___生です。",reading:"せん",meaning:"Tanaka es profesor/a."},
+ {k:"年",sentence:"日本に 一___ いました。",reading:"ねん",meaning:"Estuve un año en Japón."}
+];
+let contextIndex=0,contextOk=0,contextBad=0,contextKanjiChosen=false;
+function contextKObj(char){return KANJI.find(x=>x.c===char)}
+function renderContext(){
+ const q=CONTEXT_QUESTIONS[contextIndex%CONTEXT_QUESTIONS.length];
+ contextKanjiChosen=false;contextReadingArea.hidden=true;contextFeedback.hidden=true;contextNext.hidden=true;
+ contextCount.textContent=(contextIndex+1)+" de "+CONTEXT_QUESTIONS.length;
+ contextSentence.innerHTML=q.sentence.replace("___",'<span class="context-blank">□</span>');
+ const chars=shuffled([q.k,...shuffled(KANJI.map(x=>x.c).filter(x=>x!==q.k)).slice(0,3)]);
+ contextKanjiOptions.innerHTML=chars.map(x=>`<button class="context-option jp" data-v="${x}">${x}</button>`).join("");
+ contextKanjiOptions.querySelectorAll("button").forEach(b=>b.onclick=()=>chooseContextKanji(b,q));
+}
+function chooseContextKanji(btn,q){
+ if(contextKanjiChosen)return;
+ const ok=btn.dataset.v===q.k;
+ contextKanjiOptions.querySelectorAll("button").forEach(b=>{b.disabled=true;if(b.dataset.v===q.k)b.classList.add("good")});
+ if(!ok){
+   btn.classList.add("bad");contextBad++;contextWrong.textContent=contextBad;
+   recordProgress(contextKObj(q.k),"context",false);
+   const key=q.k+"|context";if(!reviewQueue.some(x=>x.key===key))reviewQueue.push({key,kanji:contextKObj(q.k),mode:"context"});
+   saveLocalState();
+   contextFeedback.innerHTML=`<b>✕ El kanji correcto es ${q.k}.</b>`;
+   contextFeedback.hidden=false;
+ }else contextKanjiChosen=true;
+ contextSentence.innerHTML=q.sentence.replace("___",`<span class="context-blank">${q.k}</span>`);
+ contextKanjiChosen=true;
+ const readings=shuffled([q.reading,...shuffled(KANJI.map(x=>x.kun).filter(x=>x!==q.reading)).slice(0,3)]);
+ contextReadingOptions.innerHTML=readings.map(x=>`<button class="context-option jp" data-v="${x}">${x}</button>`).join("");
+ contextReadingOptions.querySelectorAll("button").forEach(b=>b.onclick=()=>chooseContextReading(b,q));
+ contextReadingArea.hidden=false;
+}
+function chooseContextReading(btn,q){
+ const buttons=[...contextReadingOptions.querySelectorAll("button")];
+ if(buttons.some(b=>b.disabled))return;
+ const ok=btn.dataset.v===q.reading;
+ buttons.forEach(b=>{b.disabled=true;if(b.dataset.v===q.reading)b.classList.add("good")});
+ if(!ok){btn.classList.add("bad");contextBad++;contextWrong.textContent=contextBad;recordProgress(contextKObj(q.k),"context",false);}
+ else{contextOk++;contextCorrect.textContent=contextOk;recordProgress(contextKObj(q.k),"context",true);}
+ contextFeedback.innerHTML=ok
+ ? `<b>✓ Correcto.</b> <span class="jp">${q.k}（${q.reading}）</span><br>${q.meaning}`
+ : `<b>✕ La lectura correcta es <span class="jp">${q.reading}</span>.</b><br><span class="jp">${q.k}（${q.reading}）</span> · ${q.meaning}`;
+ contextFeedback.hidden=false;contextNext.hidden=false;
+}
+contextNext.onclick=()=>{contextIndex=(contextIndex+1)%CONTEXT_QUESTIONS.length;renderContext()};
+homeContextBtn.onclick=()=>{show("context");renderContext()};
+renderContext();
 
 
-function save(){
 
-  localStorage.setItem(
-    KEY,
-    JSON.stringify({
-      p:state.p,
-      stats:state.stats,
-      streak:state.streak
-    })
-  );
 
+function todayKey(){
+ const d=new Date();
+ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+function ensureGuidedDay(){
+ if(!activeStudyPlan)return null;
+ const key=todayKey();
+ if(!activeStudyPlan.guidedDays)activeStudyPlan.guidedDays={};
+ if(!activeStudyPlan.guidedDays[key]){
+   const previousDays=Object.entries(activeStudyPlan.guidedDays)
+     .filter(([date])=>date<key).sort((a,b)=>a[0].localeCompare(b[0]));
+   const pendingSet=new Set();
+   previousDays.forEach(([,day])=>(day.kanji||[]).forEach(c=>{
+     const k=KANJI.find(x=>x.c===c);
+     if(k && !guidedKanjiComplete(k))pendingSet.add(c);
+   }));
+   const alreadyAssigned=new Set(Object.values(activeStudyPlan.guidedDays).flatMap(x=>x.kanji||[]));
+   const candidates=KANJI.filter(k=>!guidedKanjiComplete(k) && !alreadyAssigned.has(k.c));
+   const newAssigned=candidates.slice(0,Math.max(1,activeStudyPlan.perDay||1)).map(k=>k.c);
+   activeStudyPlan.guidedDays[key]={
+     kanji:newAssigned,
+     review:[...pendingSet],
+     seen:[],
+     reviewSeen:[]
+   };
+   saveLocalState();
+ }
+ const d=activeStudyPlan.guidedDays[key];
+ if(!Array.isArray(d.review))d.review=[];
+ if(!Array.isArray(d.reviewSeen))d.reviewSeen=[];
+ return d;
+}
+function renderGuidedStudy(){
+ if(!activeStudyPlan){
+   show("plan"); return;
+ }
+ const day=ensureGuidedDay(), chars=day.kanji||[], reviewChars=(day.review||[]).filter(c=>{
+   const k=KANJI.find(x=>x.c===c); return k && !guidedKanjiComplete(k);
+ }), items=chars.map(c=>KANJI.find(k=>k.c===c)).filter(Boolean),
+ reviewItems=reviewChars.map(c=>KANJI.find(k=>k.c===c)).filter(Boolean);
+ const date=new Intl.DateTimeFormat("es-ES",{weekday:"long",day:"numeric",month:"long"}).format(new Date());
+ guidedSubtitle.textContent=`${date.charAt(0).toUpperCase()+date.slice(1)} · Tu sesión guiada`;
+ guidedCounter.textContent=`${items.length} kanji`;
+ guidedNewCount.textContent=items.length;
+ guidedSeenCount.textContent=(day.seen||[]).length;
+ const mastered=items.filter(kanjiLearned).length;
+ guidedMasteredCount.textContent=`${mastered}/${items.length}`;
+ guidedReviewCount.textContent=reviewItems.length;
+ guidedKanjiList.innerHTML=(reviewItems.length?`<div class="guided-section-label review-label">↻ Pendientes de días anteriores · ${reviewItems.length}</div>`:"")
+ + reviewItems.map(k=>{
+   const vocab=k.v[0];
+   return `<article class="card guided-kanji-card review-card" data-greview="${k.c}">
+    <span class="status">↻ Repaso</span>
+    <div class="ghead"><div class="glyph jp">${k.c}</div><div><h3>${k.m}</h3><p>Pendiente de una sesión anterior</p></div></div>
+    <div class="readings"><span><b>Kunyomi</b><br><span class="jp">${k.kun}</span></span><span><b>Onyomi</b><br><span class="jp">${k.on}</span></span></div>
+    <div class="example"><b>Vocabulario:</b> <span class="jp">${vocab[0]}（${vocab[1]}）</span> — ${vocab[2]}</div>
+   </article>`;
+ }).join("")
+ + `<div class="guided-section-label">今日 · Kanji nuevos de hoy · ${items.length}</div>`
+ + items.map(k=>{
+   const learned=guidedKanjiComplete(k), vocab=k.v[0];
+   return `<article class="card guided-kanji-card" data-gkanji="${k.c}">
+    <span class="status ${learned?"done":""}">${learned?"✓ Aprendido":(day.seen||[]).includes(k.c)?"Estudiado":"Nuevo"}</span>
+    <div class="ghead"><div class="glyph jp">${k.c}</div><div><h3>${k.m}</h3><p>${k.cat}</p></div></div>
+    <div class="readings"><span><b>Kunyomi</b><br><span class="jp">${k.kun}</span></span><span><b>Onyomi</b><br><span class="jp">${k.on}</span></span></div>
+    <div class="example"><b>Vocabulario:</b> <span class="jp">${vocab[0]}（${vocab[1]}）</span> — ${vocab[2]}</div>
+    <p style="margin-top:10px">${k.hint}</p>
+   </article>`;
+ }).join("");
+ guidedKanjiList.querySelectorAll("[data-greview]").forEach(card=>{
+   card.onclick=()=>{
+     const c=card.dataset.greview;
+     if(!day.reviewSeen.includes(c))day.reviewSeen.push(c);
+     saveLocalState();
+     startGuidedReview(c);
+   };
+ });
+ guidedKanjiList.querySelectorAll("[data-gkanji]").forEach(card=>{
+   card.onclick=()=>{
+     const c=card.dataset.gkanji;
+     if(!day.seen.includes(c))day.seen.push(c);
+     current=KANJI.findIndex(k=>k.c===c); render(); saveLocalState(); renderGuidedStudy();
+   };
+ });
+}
+document.getElementById("startGuidedStudy").onclick=()=>{
+ if(!activeStudyPlan){show("plan");return;}
+ ensureGuidedDay(); show("guided");
+};
+document.getElementById("guidedPracticeBtn").onclick=()=>{
+ const day=ensureGuidedDay();
+ if(day && day.kanji.length) startGuidedSession();
+};
+
+
+let gr={character:null,step:0};
+function startGuidedReview(c){
+ gr={character:c,step:0};
+ show("guidedSession");
+ renderGuidedReview();
+}
+function renderGuidedReview(){
+ const k=KANJI.find(x=>x.c===gr.character); if(!k)return;
+ gsFeedback.innerHTML=""; gsDetail.innerHTML=""; gsAnswers.innerHTML="";
+ gsProgressText.textContent=`Repaso pendiente · ${gr.step+1}/4`;
+ gsPhaseText.textContent="Recupera este kanji antes de darlo por dominado.";
+ gsTag.textContent="REPASO PENDIENTE";
+ document.querySelectorAll(".gs-steps>div").forEach(el=>{el.classList.remove("active","done")});
+ if(gr.step===0){
+   gsPrompt.textContent="¿Qué kanji corresponde a este significado?";
+   gsMain.textContent=k.m; gsMain.className="practice-main";
+   makeGRChoices(k,gsOptions(k.c,KANJI.map(x=>x.c)),"esToJp");
+ }else if(gr.step===1){
+   gsPrompt.textContent="¿Cómo se lee este kanji?";
+   gsMain.textContent=k.c; gsMain.className="practice-main jp";
+   makeGRChoices(k,gsOptions(k.kun.split("・")[0],KANJI.map(x=>x.kun.split("・")[0])),"kunyomi");
+ }else if(gr.step===2){
+   const q=CONTEXT_QUESTIONS.find(q=>q.k===k.c);
+   gsPrompt.textContent="Completa la frase con el kanji correcto.";
+   gsMain.textContent=q?q.sentence:"___"; gsMain.className="practice-main jp gs-sentence";
+   makeGRChoices(k,gsOptions(k.c,KANJI.map(x=>x.c)),"context");
+ }else{
+   gsPrompt.textContent="¿Qué significa este kanji?";
+   gsMain.textContent=k.c; gsMain.className="practice-main jp";
+   makeGRChoices(k,gsOptions(k.m,KANJI.map(x=>x.m)),"jpToEs");
+ }
+ renderGSStatus();
+}
+function makeGRChoices(k,opts,skill){
+ const correct=skill==="esToJp"||skill==="context"?k.c:skill==="kunyomi"?k.kun.split("・")[0]:k.m;
+ gsAnswers.innerHTML=opts.map(x=>`<button class="answer ${skill==="esToJp"||skill==="context"||skill==="kunyomi"?"jp":""}">${x}</button>`).join("");
+ [...gsAnswers.querySelectorAll("button")].forEach(btn=>btn.onclick=()=>{
+   const ok=btn.textContent===correct;
+   gsMark(k,skill,ok);
+   btn.classList.add(ok?"correct":"wrong");
+   [...gsAnswers.querySelectorAll("button")].forEach(b=>{if(b.textContent===correct)b.classList.add("correct");b.disabled=true;});
+   gsFeedback.innerHTML=`<b>${ok?"✓ Correcto":"✗ Aún no"}</b> · ${ok?"Seguimos.":"Respuesta: "+correct}<br><button class="nextq" id="grNext">Continuar →</button>`;
+   grNext.onclick=()=>{
+     gr.step++;
+     if(gr.step>=4){
+       renderHomePlan();
+       show("guided");
+     }else renderGuidedReview();
+   };
+ });
+}
+let gs={phase:0,index:0,order:[],answered:false};
+
+function gsDayKanji(){
+ const d=ensureGuidedDay();
+ return d ? (d.kanji||[]).map(c=>KANJI.find(k=>k.c===c)).filter(Boolean) : [];
+}
+function gsShuffle(a){return [...a].sort(()=>Math.random()-.5)}
+function gsOptions(correct,pool){
+ return gsShuffle([correct,...gsShuffle(pool.filter(x=>x!==correct)).slice(0,3)]);
+}
+function startGuidedSession(){
+ const items=gsDayKanji();
+ if(!items.length)return;
+ gs={phase:0,index:0,order:items.map(k=>k.c),answered:false};
+ show("guidedSession"); renderGS();
 }
 
-
-function pct(k){
-
-  let p=state.p[k];
-
-  let n=p.ok+p.bad;
-
-  return n
-    ? Math.round(p.ok/n*100)
-    : null;
-
+function guidedKanjiComplete(k){
+ const d=progressData[k.c];
+ const required=["esToJp","kunyomi","context","jpToEs"];
+ return required.every(skill => d[skill] && d[skill].ok >= 1);
 }
-
-
-function status(k){
-
-  let p=state.p[k];
-
-  let n=p.ok+p.bad;
-
-  let q=pct(k);
-
-  if(!n)
-    return 'Nuevo';
-
-  if(n>=5 && q>=85)
-    return 'Dominado';
-
-  if(n>=3 && q>=65)
-    return 'Casi dominado';
-
-  return 'Aprendiendo';
-
+function gsComplete(k){ return guidedKanjiComplete(k); }
+function renderGSStatus(){
+ const items=gsDayKanji(), done=items.filter(gsComplete).length;
+ gsTodayCount.textContent=items.length;
+ gsCompleteCount.textContent=done;
+ gsPendingCount.textContent=items.length-done;
+ gsKanjiStatus.innerHTML=items.map(k=>`<span class="${gsComplete(k)?"done":""}">${k.c} ${gsComplete(k)?"✓":""}</span>`).join("");
+ document.querySelectorAll(".gs-steps>div").forEach((el,i)=>{
+   el.classList.toggle("active",i===gs.phase); el.classList.toggle("done",i<gs.phase);
+ });
 }
-
-
-function eligible(){
-
-  let a=DATA;
-
-  if(state.filter==='new')
-    a=DATA.filter(
-      x=>state.p[x.k].ok+state.p[x.k].bad===0
-    );
-
-  if(state.filter==='weak')
-    a=DATA.filter(
-      x=>state.p[x.k].bad>0 &&
-      status(x.k)!=='Dominado'
-    );
-
-  return a.length
-    ? a
-    : DATA;
-
+function gsAdvance(){
+ gs.index++;
+ if(gs.index>=gs.order.length){
+   gs.phase++; gs.index=0;
+   if(gs.phase>=5){renderGSFinish();return;}
+   if(gs.phase===4) gs.order=gsShuffle(gs.order);
+ }
+ gs.answered=false; renderGS();
 }
-
-
-function choose(){
-
-  let a=eligible();
-
-  let w=[];
-
-  a.forEach(x=>{
-
-    let n=
-      1+
-      state.p[x.k].bad*2+
-      (status(x.k)==='Aprendiendo'?1:0);
-
-    for(let i=0;i<n;i++)
-      w.push(x);
-
-  });
-
-  return w[
-    Math.floor(Math.random()*w.length)
-  ];
-
+function gsMark(k,skill,ok){
+ const d=progressData[k.c][skill];
+ if(ok)d.ok++; else d.bad++;
+ if(!ok){
+   const key=k.c+"|"+skill;
+   if(!reviewQueue.some(x=>x.key===key))reviewQueue.push({key,kanji:k,mode:skill==="jpToEs"?"meaning":skill==="esToJp"?"kanji":skill==="context"?"context":skill});
+ }
+ syncLearnedCounters(); saveLocalState(); renderGSStatus();
 }
+function renderGS(){
+ const k=KANJI.find(x=>x.c===gs.order[gs.index]); if(!k)return;
+ gsFeedback.innerHTML=""; gsDetail.innerHTML=""; gsAnswers.innerHTML="";
+ const phaseNames=["Estudiar","Español → 漢","漢 → ひらがな","Aplicación y contexto","Repaso mixto"];
+ gsProgressText.textContent=`Fase ${gs.phase+1} de 5 · ${gs.index+1}/${gs.order.length}`;
+ gsPhaseText.textContent=phaseNames[gs.phase]+" · solo kanji asignados hoy";
+ gsTag.textContent=phaseNames[gs.phase].toUpperCase();
+ renderGSStatus();
 
-
-function setup(){
-
-  state.locked=false;
-
-  $('#next').disabled=true;
-
-  let x=state.cur=choose();
-
-  let correct;
-  let prompt;
-  let q;
-  let pool;
-
-
-  if(state.mode==='kanji'){
-
-    prompt=x.k;
-    correct=x.kun;
-
-    q='¿Cómo se lee este kanji?';
-
-    pool=DATA.map(y=>y.kun);
-
-  }
-
-  else if(state.mode==='reading'){
-
-    prompt=x.kun;
-    correct=x.k;
-
-    q='¿Qué kanji corresponde a esta lectura?';
-
-    pool=DATA.map(y=>y.k);
-
-  }
-
-  else{
-
-    let word=
-      x.words[
-        Math.floor(
-          Math.random()*x.words.length
-        )
-      ];
-
-    prompt=word[0];
-    correct=word[1];
-
-    q='¿Cómo se lee esta palabra?';
-
-    pool=
-      DATA.flatMap(
-        y=>y.words.map(z=>z[1])
-      );
-
-  }
-
-
-  state.answer=correct;
-
-  $('#prompt').textContent=prompt;
-
-  $('#prompt').style.fontSize=
-    state.mode==='reading'
-      ? '58px'
-      : '';
-
-  $('#question').textContent=q;
-
-  $('#category').textContent=x.c;
-
-  $('#status').textContent=
-    status(x.k);
-
-  $('#feedback').textContent=
-    'Elige una respuesta. El significado aparece después para que primero pienses en japonés.';
-
-
-  let opts=
-    shuffle([
-      correct,
-      ...shuffle(
-        [...new Set(
-          pool.filter(v=>v!==correct)
-        )]
-      ).slice(0,3)
-    ]);
-
-
-  let box=$('#answers');
-
-  box.innerHTML='';
-
-
-  opts.forEach(v=>{
-
-    let b=
-      document.createElement('button');
-
-    b.className='answer jp';
-
-    b.textContent=v;
-
-    b.onclick=()=>answer(v,b);
-
-    box.appendChild(b);
-
-  });
-
-
-  render();
-
+ if(gs.phase===0){
+   gsPrompt.textContent="Míralo con calma. ¿Lo conoces?";
+   gsMain.textContent=k.c; gsMain.className="practice-main jp";
+   gsDetail.innerHTML=`<b>${k.m}</b><div class="reading-boxes"><span>Kunyomi · <b class="jp">${k.kun}</b></span><span>Onyomi · <b class="jp">${k.on}</b></span></div><div style="margin-top:10px">Ejemplo: <b class="jp">${k.v[0][0]}（${k.v[0][1]}）</b> — ${k.v[0][2]}</div>`;
+   gsAnswers.innerHTML=`<div class="gs-known"><button id="gsKnow">✓ Lo sé</button><button id="gsDont">Todavía no</button></div>`;
+   gsKnow.onclick=()=>{ const day=ensureGuidedDay(); if(!day.seen.includes(k.c))day.seen.push(k.c); saveLocalState(); gsAdvance(); };
+   gsDont.onclick=()=>{ const day=ensureGuidedDay(); if(!day.seen.includes(k.c))day.seen.push(k.c); saveLocalState(); gsAdvance(); };
+   return;
+ }
+ if(gs.phase===1){
+   gsPrompt.textContent="¿Qué kanji corresponde a este significado?";
+   gsMain.textContent=k.m; gsMain.className="practice-main";
+   makeGSChoices(k,gsOptions(k.c,gsDayKanji().map(x=>x.c)),"esToJp");
+   return;
+ }
+ if(gs.phase===2){
+   gsPrompt.textContent="¿Cómo se lee este kanji?";
+   gsMain.textContent=k.c; gsMain.className="practice-main jp";
+   gsDetail.innerHTML="";
+   makeGSHiraganaChoices(k);
+   return;
+ }
+ if(gs.phase===3){
+   const q=CONTEXT_QUESTIONS.find(q=>q.k===k.c);
+   gsPrompt.textContent="Completa la frase con el kanji correcto.";
+   gsMain.textContent=q?q.sentence:"___"; gsMain.className="practice-main jp gs-sentence";
+   if(q)gsDetail.innerHTML="";
+   makeGSContextChoices(k,q);
+   return;
+ }
+ // Fase 5: comprobación final. Cada kanji completa la competencia que faltaba:
+ // reconocer su significado desde el kanji. Las demás ya se evaluaron en fases 2-4.
+ gsPrompt.textContent="Repaso final: ¿qué significa este kanji?";
+ gsMain.textContent=k.c; gsMain.className="practice-main jp";
+ gsDetail.innerHTML="";
+ makeGSChoices(k,gsOptions(k.m,gsDayKanji().map(x=>x.m)),"jpToEs");
 }
-
-
-function answer(v,b){
-
-  if(state.locked)
-    return;
-
-  state.locked=true;
-
-  let ok=
-    v===state.answer;
-
-  state.stats.total++;
-
-
-  if(ok){
-
-    state.stats.correct++;
-
-    state.streak++;
-
-    state.p[state.cur.k].ok++;
-
-    b.classList.add('good');
-
-  }
-
-  else{
-
-    state.streak=0;
-
-    state.p[state.cur.k].bad++;
-
-    b.classList.add('bad');
-
-  }
-
-
-  [...$('#answers').children]
-    .forEach(el=>{
-
-      el.disabled=true;
-
-      if(el.textContent===state.answer)
-        el.classList.add('good');
-
-    });
-
-
-  let ex=
-    state.cur.words[0];
-
-
-  $('#feedback').innerHTML=
-
-    (ok
-      ? '<strong>✓ Correcto.</strong> '
-      : '<strong>✗ Aún no.</strong> ')
-
-    +
-
-    '<span class="jp">'+
-    state.cur.k+
-    ' → '+
-    state.answer+
-    '</span> · '+
-    state.cur.m+
-
-    '<br>Ejemplo: <span class="jp">'+
-    ex[0]+
-    '（'+
-    ex[1]+
-    '）</span>';
-
-
-  $('#next').disabled=false;
-
-  save();
-
-  render();
-
+function makeGSHiraganaChoices(k){
+ const correct=k.kun.split("・")[0];
+ const pool=gsDayKanji().map(x=>x.kun.split("・")[0]);
+ const opts=gsOptions(correct,pool);
+ gsAnswers.innerHTML=opts.map(x=>`<button class="answer jp">${x}</button>`).join("");
+ [...gsAnswers.querySelectorAll("button")].forEach(btn=>btn.onclick=()=>{
+   if(gs.answered)return; gs.answered=true;
+   const ok=btn.textContent===correct; gsMark(k,"kunyomi",ok);
+   btn.classList.add(ok?"correct":"wrong");
+   [...gsAnswers.querySelectorAll("button")].forEach(b=>{if(b.textContent===correct)b.classList.add("correct");b.disabled=true;});
+   gsFeedback.innerHTML=`<b>${ok?"✓ Correcto":"✗ Aún no"}</b> · ${ok?"Seguimos.":"Respuesta: "+correct}<br><button class="nextq" id="gsNext">Continuar →</button>`;
+   gsNext.onclick=gsAdvance;
+ });
 }
-
-
-function render(){
-
-  let statuses=
-    DATA.map(
-      x=>status(x.k)
-    );
-
-
-  let worked=
-    DATA.filter(
-      x=>
-        state.p[x.k].ok+
-        state.p[x.k].bad>0
-    ).length;
-
-
-  let master=
-    statuses.filter(
-      s=>s==='Dominado'
-    ).length;
-
-
-  let almost=
-    statuses.filter(
-      s=>s==='Casi dominado'
-    ).length;
-
-
-  let learn=
-    statuses.filter(
-      s=>s==='Aprendiendo'
-    ).length;
-
-
-  $('#mastered').textContent=
-    master;
-
-
-  $('#accuracy').textContent=
-    state.stats.total
-      ? Math.round(
-          state.stats.correct/
-          state.stats.total*
-          100
-        )+'%'
-      : '—';
-
-
-  $('#answered').textContent=
-    state.stats.total;
-
-
-  $('#streak').textContent=
-    state.streak;
-
-
-  $('#worked').textContent=
-    worked+' / '+DATA.length;
-
-
-  $('#bar').style.width=
-    Math.round(
-      worked/DATA.length*100
-    )+'%';
-
-
-  $('#lMaster').textContent=
-    master;
-
-  $('#lAlmost').textContent=
-    almost;
-
-  $('#lLearn').textContent=
-    learn;
-
-  $('#lNew').textContent=
-    DATA.length-
-    master-
-    almost-
-    learn;
-
-
-  let list=
-    $('#kanjiList');
-
-  list.innerHTML='';
-
-
-  DATA.forEach(x=>{
-
-    let s=
-      status(x.k);
-
-    let q=
-      pct(x.k);
-
-
-    let cls=
-
-      s==='Dominado'
-        ? 'master'
-
-      :s==='Casi dominado'
-        ? 'almost'
-
-      :s==='Aprendiendo'
-        ? 'learn'
-
-      :'new';
-
-
-    let d=
-      document.createElement('div');
-
-
-    d.className='krow';
-
-
-    d.innerHTML=
-
-      '<span class="glyph jp">'+
-      x.k+
-      '</span>'+
-
-      '<span>'+
-      '<b class="jp">'+
-      x.kun+
-      '</b><br>'+
-      '<small>'+
-      x.m+
-      '</small>'+
-      '</span>'+
-
-      '<span class="pill '+cls+'">'+
-      (q===null?s:q+'%')+
-      '</span>';
-
-
-    list.appendChild(d);
-
-  });
-
+function makeGSContextChoices(k,q){
+ const correct=k.c;
+ const pool=gsDayKanji().map(x=>x.c);
+ const opts=gsOptions(correct,pool);
+ gsAnswers.innerHTML=opts.map(x=>`<button class="answer jp gs-kanji-option">${x}</button>`).join("");
+ [...gsAnswers.querySelectorAll("button")].forEach(btn=>btn.onclick=()=>{
+   if(gs.answered)return; gs.answered=true;
+   const ok=btn.textContent===correct; gsMark(k,"context",ok);
+   btn.classList.add(ok?"correct":"wrong");
+   [...gsAnswers.querySelectorAll("button")].forEach(b=>{if(b.textContent===correct)b.classList.add("correct");b.disabled=true;});
+   gsFeedback.innerHTML=`<b>${ok?"✓ Correcto":"✗ Aún no"}</b> · ${ok?"Seguimos.":"Respuesta: "+correct}<br><button class="nextq" id="gsNext">Continuar →</button>`;
+   gsNext.onclick=gsAdvance;
+ });
 }
-
-
-$('#next').onclick=
-  setup;
-
-
-document
-.querySelectorAll('[data-mode]')
-.forEach(b=>
-
-  b.onclick=()=>{
-
-    state.mode=
-      b.dataset.mode;
-
-    document
-    .querySelectorAll('[data-mode]')
-    .forEach(
-      x=>x.classList.remove('active')
-    );
-
-    b.classList.add('active');
-
-    setup();
-
-  }
-
-);
-
-
-document
-.querySelectorAll('[data-filter]')
-.forEach(b=>
-
-  b.onclick=()=>{
-
-    state.filter=
-      b.dataset.filter;
-
-    setup();
-
-  }
-
-);
-
-
-setup();
-
+function makeGSChoices(k,opts,skill){
+ const correct= skill==="esToJp"||skill==="context" ? k.c :
+   skill==="jpToEs" ? k.m :
+   skill==="kunyomi" ? k.kun :
+   skill==="onyomi" ? k.on :
+   k.v[0][2];
+ gsAnswers.innerHTML=opts.map(x=>`<button class="answer">${x}</button>`).join("");
+ [...gsAnswers.querySelectorAll("button")].forEach(btn=>btn.onclick=()=>{
+   if(gs.answered)return; gs.answered=true;
+   const ok=btn.textContent===correct; gsMark(k,skill,ok);
+   btn.classList.add(ok?"correct":"wrong");
+   [...gsAnswers.querySelectorAll("button")].forEach(b=>{if(b.textContent===correct)b.classList.add("correct");b.disabled=true;});
+   gsFeedback.innerHTML=`<b>${ok?"✓ Correcto":"✗ Aún no"}</b> · ${ok?"Seguimos.":"Respuesta: "+correct}<br><button class="nextq" id="gsNext">Continuar →</button>`;
+   gsNext.onclick=gsAdvance;
+ });
+}
+function renderGSFinish(){
+ gsPrompt.textContent="Sesión de hoy terminada";
+ gsMain.textContent="おつかれさま"; gsMain.className="practice-main jp";
+ const items=gsDayKanji();
+ const okItems=items.filter(guidedKanjiComplete);
+ const pending=items.filter(k=>!guidedKanjiComplete(k));
+ gsDetail.innerHTML=`<div style="margin-bottom:12px"><b>${okItems.length}/${items.length} kanji dominados hoy</b></div>
+ <div class="gs-status-list" style="justify-content:center">${items.map(k=>`<span class="${guidedKanjiComplete(k)?"done":""}">${k.c} ${guidedKanjiComplete(k)?"✓ Dominado":"· Pendiente"}</span>`).join("")}</div>
+ ${pending.length?'<p style="margin-top:14px">Los pendientes pasan a repaso.</p>':'<p style="margin-top:14px">¡Objetivo de hoy completado!</p>'}`;
+ gsAnswers.innerHTML=`<div class="gs-known"><button id="gsFinishHome">Volver a Inicio</button><button id="gsFinishReview">Repasar pendientes</button></div>`;
+ gsFeedback.innerHTML="";
+ renderGSStatus();
+ gsFinishHome.onclick=()=>{renderHomePlan();show("inicio")};
+ gsFinishReview.onclick=()=>show("repasar");
+}
+const LOCAL_STATE_KEY="kanjiTrainerState_plan_days_v1";
+function saveLocalState(){
+ try{
+   const safeQueue=reviewQueue.map(x=>({key:x.key,character:x.kanji.c,mode:x.mode}));
+   localStorage.setItem(LOCAL_STATE_KEY,JSON.stringify({
+     version:1,
+     progressData,
+     reviewQueue:safeQueue,
+     activeStudyPlan,
+     savedAt:new Date().toISOString()
+   }));
+ }catch(e){ console.warn("No se pudo guardar el progreso local.",e); }
+}
+function loadLocalState(){
+ try{
+   const raw=localStorage.getItem(LOCAL_STATE_KEY);
+   if(!raw)return false;
+   const state=JSON.parse(raw);
+   if(state.progressData){
+     KANJI.forEach(k=>{
+       const saved=state.progressData[k.c];
+       if(!saved)return;
+       Object.keys(progressData[k.c]).forEach(skill=>{
+         if(saved[skill]){
+           progressData[k.c][skill].ok=Number(saved[skill].ok)||0;
+           progressData[k.c][skill].bad=Number(saved[skill].bad)||0;
+         }
+       });
+     });
+   }
+   if(Array.isArray(state.reviewQueue)){
+     reviewQueue=state.reviewQueue.map(x=>{
+       const k=KANJI.find(k=>k.c===x.character);
+       return k?{key:x.key,kanji:k,mode:x.mode}:null;
+     }).filter(Boolean);
+   }
+   if(state.activeStudyPlan)activeStudyPlan=state.activeStudyPlan;
+   return true;
+ }catch(e){
+   console.warn("No se pudo recuperar el progreso local.",e);
+   return false;
+ }
+}
+function refreshAfterLoad(){
+ syncLearnedCounters();
+ renderHomePlan();
+ if(activeStudyPlan){
+   pagePlanLevel.value=activeStudyPlan.level||"N5";
+   pagePlanTotal.value=activeStudyPlan.total||100;
+   pagePlanWeeks.value=activeStudyPlan.weeks||4;
+   pagePlanDays.value=activeStudyPlan.days||5;
+   pagePlanLearned.value=learnedKanjiCount();
+   syncPlanUpdateButton();
+   calcPagePlan();
+ }
+}
+loadLocalState();
+refreshAfterLoad();
 
 </script>
-
-<script>
-  const SUPABASE_URL = 'https://cdshkqfrzcschdoosxty.supabase.co';
-  const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_vy7FwDZiHS4vlmkBpFDOUw_yccOKS41';
-
-  const db = supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-  );
-
-  console.log('Supabase conectado:', db);
-
-  async function probarConexion() {
-    const { data, error } = await db
-      .from('kanji')
-      .select('character, meaning_es')
-      .limit(3);
-
-    if (error) {
-      console.error('❌ Error al leer Supabase:', error);
-    } else {
-      console.log('✅ Kanji recibidos desde Supabase:', data);
-    }
-  }
-
-  probarConexion();
-</script>
-
-</body>
-
-</html>
+</body></html>
